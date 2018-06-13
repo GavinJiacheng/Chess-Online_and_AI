@@ -1,0 +1,35 @@
+#ifndef GAME_H
+#define GAME_H
+
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QMouseEvent>
+#include "gameitems/gameboard.h"
+#include "gameitems/boardbox.h"
+
+
+class game:public QGraphicsView
+{
+    Q_OBJECT
+public:
+    game(QWidget *parent = NULL);
+    void placeTheBoard();
+    void addToScene(QGraphicsItem *item);
+    void start();
+    boardbox* getbox(int i, int j);
+    void pickUpPieces(Piece* P);
+    void placePieces();
+
+    void mouseMoveEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent* event);
+    void mouseReleaseEvent(QMouseEvent* event);
+
+
+private:
+    QGraphicsScene* gameScene;
+    gameboard *board;
+    QPointF originalPos;
+    Piece* piece_to_placed;
+};
+
+#endif // GAME_H
