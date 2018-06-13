@@ -23,6 +23,9 @@ public:
     void mouseMoveEvent(QMouseEvent *event);
     //void mousePressEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);
+    int getTurn();
+    void setTurn(int i);
+    void changeTurn();
 
 
 private:
@@ -30,6 +33,8 @@ private:
     gameboard *board;
     QPointF originalPos;
     Piece* piece_to_placed;
+    int turn; // 1 =black, 0 = white
+    QGraphicsTextItem * turnDisplay;
 };
 
 #endif // GAME_H

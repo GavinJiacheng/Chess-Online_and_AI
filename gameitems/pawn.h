@@ -9,6 +9,7 @@ public:
     pawn(int color, int col, int row,  QGraphicsItem *parent = NULL);
     void setImage();
     bool canmove(int x, int y);
+    bool pawnAttack(int x, int y);
 };
 
 #endif // PAWN_H

@@ -15,7 +15,7 @@ Piece::Piece(int color, int col, int row, QGraphicsItem *parent):QGraphicsPixmap
 void Piece::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //this->debug = 89;
-    if (event->button() == Qt ::LeftButton && !isdead)
+    if (event->button() == Qt ::LeftButton && !isdead && Game->getTurn() == this->side)
     {
         if (Game != NULL)
             Game->pickUpPieces(this);
@@ -38,20 +38,20 @@ void Piece::die()
 {
     if (side)
     {
-        deadBlack++;
         int ROW = deadBlack/3;
-        int COL = deadBlack - 3*ROW -1;
-        this->setPos(1150+COL*70, 50+ROW*80);
+        int COL = deadBlack - 3*ROW;
+        deadBlack++;
+        this->setPos(1150+COL*75, 50+ROW*80);
         this->isdead =true;
         this->CurrentBox->removepiece();
         this->CurrentBox =NULL;
     }
     else
     {
-        deadWhite++;
         int ROW = deadWhite/3;
-        int COL = deadWhite - 3*ROW -1;
-        this->setPos(COL*70, 50+ROW*80);
+        int COL = deadWhite - 3*ROW;
+        deadWhite++;
+        this->setPos(COL*75, 50+ROW*80);
         this->isdead =true;
         this->CurrentBox->removepiece();
         this->CurrentBox =NULL;
@@ -92,4 +92,9 @@ bool Piece::Ismoved()
 bool Piece::dead()
 {
     return isdead;
+}
+
+bool Piece::pawnAttack(int x, int y)
+{
+    return false;
 }

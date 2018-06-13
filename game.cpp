@@ -26,20 +26,14 @@ game::game(QWidget *parent):QGraphicsView(parent)
     setBackgroundBrush(brush);
     piece_to_placed = NULL; // LOL , you must declare this fucking piece of shit.
 
-
-
-
-  //  pieceToMove = NULL;
-
-
-    /*
+    turn = 0; //0 is white and 1 is black
     turnDisplay = new QGraphicsTextItem();
     turnDisplay->setPos(width()/2-100,10);
     turnDisplay->setZValue(1);
     turnDisplay->setDefaultTextColor(Qt::white);
     turnDisplay->setFont(QFont("",18));
     turnDisplay->setPlainText("Turn : WHITE");
-*/
+
 
 }
 
@@ -57,7 +51,9 @@ void game::addToScene(QGraphicsItem *item)
 
 void game::start()
 {
+    addToScene(turnDisplay);
     placeTheBoard();
+    placePieces();
 }
 
 boardbox *game::getbox(int i, int j)
@@ -124,10 +120,22 @@ void game::mouseReleaseEvent(QMouseEvent *event)
             piece_to_placed = NULL;
             return;
         }
-
-        if(piece_to_placed->canmove(x,y))
+        boardbox *targetBox = getbox(x,y);
+        if(piece_to_placed->pawnAttack(x,y) && targetBox->hasPiece() && targetBox->getpiece()->getside() != piece_to_placed->getside())
         {
-            boardbox *targetBox = getbox(x,y);
+            targetBox->getpiece()->die();
+            piece_to_placed->setPos(finalX,finalY);
+            piece_to_placed->setlocation(x,y);
+            piece_to_placed->moved();
+            piece_to_placed->getCurrentBox()->removepiece();
+            piece_to_placed->setCurrentBox(targetBox);
+            piece_to_placed->getCurrentBox()->placepiece(piece_to_placed);
+            changeTurn();
+            piece_to_placed = NULL;
+            return;
+        }
+        else if(piece_to_placed->canmove(x,y))
+        {
             if (targetBox->hasPiece())
             {
                 if (targetBox->getpiece()->getside() == piece_to_placed->getside())
@@ -145,6 +153,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
             piece_to_placed->getCurrentBox()->removepiece();
             piece_to_placed->setCurrentBox(targetBox);
             piece_to_placed->getCurrentBox()->placepiece(piece_to_placed);
+            changeTurn();
             piece_to_placed = NULL;
             return;
             //What the fuck are you ? QGraphicsView::mouseReleaseEvent(event);
@@ -152,12 +161,36 @@ void game::mouseReleaseEvent(QMouseEvent *event)
         else
         {
             piece_to_placed->setPos(originalPos);
-            qDebug() << "o:" <<piece_to_placed->location[0] << ","<<piece_to_placed->location[1];
-            qDebug() << "f:" <<finalX/100-3 << ","<<(finalY-50)/100;
-            qDebug() << "f2:" <<x << ","<<y;
+            //qDebug() << "o:" <<piece_to_placed->location[0] << ","<<piece_to_placed->location[1];
+            //qDebug() << "f:" <<finalX/100-3 << ","<<(finalY-50)/100;
+            //qDebug() << "f2:" <<x << ","<<y;
             piece_to_placed = NULL;
             return;
         }
      }
     piece_to_placed = NULL;
+}
+
+int game::getTurn()
+{
+    return turn;
+}
+
+void game::setTurn(int i)
+{
+    turn = i;
+}
+
+void game::changeTurn()
+{
+    if(turn)
+    {
+        turn = 0;
+        turnDisplay->setPlainText("Turn : WHITE");
+    }
+    else
+    {
+        turn = 1;
+        turnDisplay->setPlainText("Turn : BLACK");
+    }
 }

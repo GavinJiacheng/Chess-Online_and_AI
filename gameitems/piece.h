@@ -26,12 +26,12 @@ public:
     void moved();
     bool Ismoved();
     bool dead();
-        int location[2];
+   virtual bool pawnAttack(int x, int y);
 
     //int debug;
 
 protected:
-    //int location[2];
+    int location[2];
     int side; //1 = black, 0 = white
 
 private:

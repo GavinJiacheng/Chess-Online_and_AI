@@ -7,7 +7,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     Game = new game();
     Game->show();
-    Game->placeTheBoard();
-    Game->placePieces();
+    Game->start();
     return a.exec();
 }

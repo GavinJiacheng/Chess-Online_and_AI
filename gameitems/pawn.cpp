@@ -49,3 +49,12 @@ bool pawn::canmove(int x, int y)
             return false;
     }
 }
+
+bool pawn::pawnAttack(int x, int y)
+{
+    int pace = -1 + 2* side;
+    if (y-location[1] == pace && (x - location[0] == 1 || x - location[0] == -1))
+        return true;
+    else
+        return false;
+}
