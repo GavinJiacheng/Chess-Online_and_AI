@@ -50,7 +50,10 @@ void gameboard::placeBoxes()
 
 boardbox *gameboard::getbox(int i, int j)
 {
-    return boxes[i][j];
+    if (i <0 || i>7 ||j<0||j>7)
+        return NULL;
+    else
+        return boxes[i][j];
 }
 
 void gameboard::startup()
@@ -75,6 +78,7 @@ void gameboard::startup()
     black.append(piece);
     piece = new king(1,4,0);
     piece->setPos(700,50);
+    BKing = piece;
     Game->addToScene(piece);
     black.append(piece);
     piece = new bishop(1,5,0);
@@ -120,6 +124,7 @@ void gameboard::startup()
     white.append(piece);
     piece = new king(0,4,7);
     piece->setPos(700,750);
+    WKing = piece;
     Game->addToScene(piece);
     white.append(piece);
     piece = new bishop(0,5,7);
@@ -134,5 +139,12 @@ void gameboard::startup()
     piece->setPos(1000,750);
     Game->addToScene(piece);
     white.append(piece);
+}
+
+bool gameboard::checkCanCheck()
+{
+    boardbox *WKingbox = WKing->getCurrentBox();
+    boardbox *BKingbox = BKing->getCurrentBox();
+    return (WKingbox->checkAttacked() || BKingbox->checkAttacked());
 }
 

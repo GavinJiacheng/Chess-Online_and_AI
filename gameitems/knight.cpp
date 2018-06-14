@@ -24,3 +24,8 @@ bool knight::canmove(int x, int y)
     else
         return false;
 }
+
+int knight::getType()
+{
+    return 6;
+}

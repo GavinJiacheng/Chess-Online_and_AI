@@ -20,3 +20,14 @@ bool king::canmove(int x, int y)
     else
         return false;
 }
+
+int king::die()
+{
+    this->Piece::die();
+    return side;
+}
+
+int king::getType()
+{
+    return 9;
+}

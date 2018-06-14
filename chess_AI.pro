@@ -60,7 +60,8 @@ SOURCES += \
     gameitems/queen.cpp \
     gameitems/rook.cpp \
     game.cpp \
-    main.cpp
+    main.cpp \
+    button.cpp
 
 HEADERS += \
     game.h \
@@ -95,7 +96,8 @@ HEADERS += \
     gameitems/piece.h \
     gameitems/queen.h \
     gameitems/rook.h \
-    game.h
+    game.h \
+    button.h
 
 FORMS += \
         mainwindow.ui

@@ -13,4 +13,7 @@
         <file>piecesicon/rook.png</file>
         <file>piecesicon/rook1.png</file>
     </qresource>
+    <qresource prefix="/mainmenu">
+        <file>images/mainmenu.png</file>
+    </qresource>
 </RCC>

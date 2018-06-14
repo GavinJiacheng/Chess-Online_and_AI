@@ -34,7 +34,7 @@ boardbox *Piece::getCurrentBox()
     return CurrentBox;
 }
 
-void Piece::die()
+int Piece::die()
 {
     if (side)
     {
@@ -56,6 +56,7 @@ void Piece::die()
         this->CurrentBox->removepiece();
         this->CurrentBox =NULL;
     }
+    return -1;
 }
 
 void Piece::setWeight(int w)

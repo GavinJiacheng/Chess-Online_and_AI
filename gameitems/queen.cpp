@@ -65,3 +65,8 @@ bool queen::canmove(int x, int y)
     else
         return false;
 }
+
+int queen::getType()
+{
+    return 8;
+}

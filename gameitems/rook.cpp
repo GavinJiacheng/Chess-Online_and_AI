@@ -42,3 +42,8 @@ bool rook::canmove(int x, int y)
     else
         return false;
 }
+
+int rook::getType()
+{
+    return 7;
+}

@@ -41,3 +41,10 @@ bool bishop::canmove(int x, int y)
     else
         return false;
 }
+
+int bishop::getType()
+{
+    return 5;
+}
+
+

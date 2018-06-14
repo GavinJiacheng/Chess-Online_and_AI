@@ -9,6 +9,8 @@ public:
     king(int color, int col, int row,  QGraphicsItem *parent = NULL);
     void setImage();
     bool canmove(int x, int y);
+    int die();
+    int getType();
 };
 
 #endif // KING_H

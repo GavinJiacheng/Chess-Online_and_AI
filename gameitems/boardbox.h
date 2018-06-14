@@ -22,12 +22,19 @@ public:
     void setboard(gameboard* board);
     gameboard *getboard();
     Piece *getpiece();
+    bool checkAttackedByKnight(int side, int x, int y);
+    bool checkAttackedByQueen(int side, int x, int y);
+    bool checkAttackedByBishop(int side, int x, int y);
+    bool checkAttackedByPawn(int side, int x, int y);
+    bool checkAttackedByRook(int side, int x, int y);
+    bool checkAttackedByKing(int side, int x, int y);
+    bool checkAttacked(int side, int x,int y);
     //bool IsThisBox();
 private:
     gameboard *board;
     QColor color;
-    int row;
     int col;
+    int row;
     QBrush brush;
     Piece * currentPiece;
 };

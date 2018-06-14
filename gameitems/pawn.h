@@ -10,6 +10,7 @@ public:
     void setImage();
     bool canmove(int x, int y);
     bool pawnAttack(int x, int y);
+    int getType();
 };
 
 #endif // PAWN_H

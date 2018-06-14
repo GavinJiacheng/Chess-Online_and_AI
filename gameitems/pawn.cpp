@@ -58,3 +58,8 @@ bool pawn::pawnAttack(int x, int y)
     else
         return false;
 }
+
+int pawn::getType()
+{
+    return 4;
+}

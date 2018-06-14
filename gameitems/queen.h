@@ -9,6 +9,7 @@ public:
     queen(int color, int col, int row,  QGraphicsItem *parent = NULL);
     void setImage();
     bool canmove(int x, int y);
+    int getType();
 };
 
 #endif // QUEEN_H
