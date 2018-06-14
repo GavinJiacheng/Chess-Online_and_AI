@@ -19,7 +19,6 @@ public:
     boardbox* getbox(int i, int j);
     void pickUpPieces(Piece* P);
     void placePieces();
-    void mainmenu();
 
     void mouseMoveEvent(QMouseEvent *event);
     //void mousePressEvent(QMouseEvent* event);
@@ -29,12 +28,15 @@ public:
     void changeTurn();
     void playOffline();
     void SetGamecolor();
+    void gameOver(int color);
 
 public slots:
     void start();
+    void mainmenu();
 
 
 private:
+    QGraphicsTextItem *check;
     QGraphicsScene* gameScene;
     gameboard *board;
     QPointF originalPos;

@@ -16,7 +16,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void setCurrentBox(boardbox *Box);
     boardbox *getCurrentBox();
-    int die(); //return -1 if this piece is not king.
+    virtual int die(); //return -1 if this piece is not king.
     void setWeight(int w);
     int getWeight();
     virtual void setImage() =0;
@@ -27,17 +27,18 @@ public:
     bool Ismoved();
     bool dead();
     virtual int getType() = 0; // 9 king, 8 queen, 7 rook, 6 knight, 5 bishop, 4 pawn
-   virtual bool pawnAttack(int x, int y);
+    virtual bool pawnAttack(int x, int y);
+    void moveTo(int x, int y);
 
     //int debug;
 
 protected:
     int location[2];
     int side; //1 = black, 0 = white
+    boardbox *CurrentBox;
 
 private:
     bool isdead = false;
-    boardbox *CurrentBox;
     int weight;
     bool ismoved = false;
 

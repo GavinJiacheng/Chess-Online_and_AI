@@ -99,3 +99,22 @@ bool Piece::pawnAttack(int x, int y)
 {
     return false;
 }
+
+void Piece::moveTo(int x, int y)
+{
+    int xPos, yPos;
+    if(this->getCurrentBox()->getboard()->playerSside())
+    {}
+    else
+    {
+        xPos = (x+3)*100;
+        yPos = y*100+50;
+    }
+    boardbox *targetBox = this->getCurrentBox()->getboard()->getbox(x,y);
+    this->setPos(xPos,yPos);
+    this->setlocation(x,y);
+    this->moved();
+    this->getCurrentBox()->removepiece();
+    this->setCurrentBox(targetBox);
+    this->getCurrentBox()->placepiece(this);
+}

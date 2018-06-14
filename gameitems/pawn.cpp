@@ -63,3 +63,4 @@ int pawn::getType()
 {
     return 4;
 }
+

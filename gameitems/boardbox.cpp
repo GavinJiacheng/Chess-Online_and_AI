@@ -59,29 +59,21 @@ Piece *boardbox::getpiece()
 
 bool boardbox::checkAttackedByKnight(int side, int x, int y)
 {
-    Piece isKnight = getboard()->getbox(x+1,y+2)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x+1,y+2) && getboard()->getbox(x+1,y+2)->getpiece() && getboard()->getbox(x+1,y+2)->getpiece()->getType() == 6 && getboard()->getbox(x+1,y+2)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x+1,y-2)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x+1,y-2) && getboard()->getbox(x+1,y-2)->getpiece() && getboard()->getbox(x+1,y-2)->getpiece()->getType() == 6 && getboard()->getbox(x+1,y-2)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x-1,y+2)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x-1,y+2) && getboard()->getbox(x-1,y+2)->getpiece() && getboard()->getbox(x-1,y+2)->getpiece()->getType() == 6 && getboard()->getbox(x-1,y+2)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x-1,y-2)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x-1,y-2) && getboard()->getbox(x-1,y-2)->getpiece() && getboard()->getbox(x-1,y-2)->getpiece()->getType() == 6 && getboard()->getbox(x-1,y-2)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x+2,y+1)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x+2,y+1) && getboard()->getbox(x+2,y+1)->getpiece() && getboard()->getbox(x+2,y+1)->getpiece()->getType() == 6 && getboard()->getbox(x+2,y+1)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x+2,y-1)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x+2,y-1) && getboard()->getbox(x+2,y-1)->getpiece() && getboard()->getbox(x+2,y-1)->getpiece()->getType() == 6 && getboard()->getbox(x+2,y-1)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x-2,y+1)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x-2,y+1) && getboard()->getbox(x-2,y+1)->getpiece() && getboard()->getbox(x-2,y+1)->getpiece()->getType() == 6 && getboard()->getbox(x-2,y+1)->getpiece()->getside() != side)
         return true;
-    isKnight = getboard()->getbox(x-2,y-1)->getpiece();
-    if (isKnight && isKnight->getType() == 6 && isKnight->getside() != side)
+    if (getboard()->getbox(x-2,y-1) && getboard()->getbox(x-2,y-1)->getpiece() && getboard()->getbox(x-2,y-1)->getpiece()->getType() == 6 && getboard()->getbox(x-2,y-1)->getpiece()->getside() != side)
         return true;
     return false;
 }
@@ -89,81 +81,117 @@ bool boardbox::checkAttackedByKnight(int side, int x, int y)
 bool boardbox::checkAttackedByQueen(int side, int x, int y)
 {
     int i = x, j = y;
-    Piece isQueen; // copy from rooks function
+    Piece *isQueen; // copy from rooks function
+    i++;
+    j++;
     for (;i<=7 && j <= 7;i++)
     {
-        isQueen = getboard()->getbox(i,j)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(i,j)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
         j++;
     }
     i = x, j = y;
+    i++;
+    j--;
     for (;i<=7 && j >= 0;i++)
     {
-        isQueen = getboard()->getbox(i,j)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(i,j)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
         j--;
     }
     i = x, j = y;
+    i--;
+    j++;
     for (;i>=0 && j <= 7;i--)
     {
-        isQueen = getboard()->getbox(i,j)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(i,j)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
         j++;
     }
     i = x, j = y;
+    i--;
+    j--;
     for (;i>=0 && j >= 0;i--)
     {
-        isQueen = getboard()->getbox(i,j)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(i,j)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
         j--;
     }
-    int i = x, j = y;
+    i = x, j = y;
+    i++;
     for (;i<=7;i++)
     {
-        isQueen = getboard()->getbox(i,y)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(i,y)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
     }
     i = x;
+    i--;
     for (;i>=0;i--)
     {
-        isQueen = getboard()->getbox(i,y)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(i,y)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
     }
     i = x, j = y;
-    for (;j>=0;i--)
+    j--;
+    for (;j>=0;j--)
     {
-        isQueen = getboard()->getbox(x,j)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(x,j)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
     }
     j = y;
+    j++;
     for (;j<=7; j++)
     {
-        isQueen = getboard()->getbox(x,j)->getpiece();
-        if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
-            break;
-        if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isQueen = getboard()->getbox(x,j)->getpiece();
+            if (isQueen && (isQueen->getType() != 8 || isQueen->getside() == side))
+                break;
+            if (isQueen && isQueen->getType() == 8 && isQueen->getside() != side)
+                return true;
+        }
     }
     return false;
 }
@@ -171,44 +199,64 @@ bool boardbox::checkAttackedByQueen(int side, int x, int y)
 bool boardbox::checkAttackedByBishop(int side, int x, int y)
 {
     int i = x, j = y;
-    Piece isBishop;
+    Piece *isBishop;
+    i++;
+    j++;
     for (;i<=7 && j <= 7;i++)
     {
-        isBishop = getboard()->getbox(i,j)->getpiece();
-        if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
-            break;
-        if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isBishop = getboard()->getbox(i,j)->getpiece();
+            if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
+                break;
+            if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
+                return true;
+        }
         j++;
     }
     i = x, j = y;
+    i++;
+    j--;
     for (;i<=7 && j >= 0;i++)
     {
-        isBishop = getboard()->getbox(i,j)->getpiece();
-        if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
-            break;
-        if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isBishop = getboard()->getbox(i,j)->getpiece();
+            if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
+                break;
+            if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
+                return true;
+        }
         j--;
     }
     i = x, j = y;
+    i--;
+    j++;
     for (;i>=0 && j <= 7;i--)
     {
-        isBishop = getboard()->getbox(i,j)->getpiece();
-        if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
-            break;
-        if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isBishop = getboard()->getbox(i,j)->getpiece();
+            if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
+                break;
+            if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
+                return true;
+        }
         j++;
     }
     i = x, j = y;
+    i--;
+    j--;
     for (;i>=0 && j >= 0;i--)
     {
-        isBishop = getboard()->getbox(i,j)->getpiece();
-        if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
-            break;
-        if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isBishop = getboard()->getbox(i,j)->getpiece();
+            if (isBishop && (isBishop->getType() != 5 || isBishop->getside() == side))
+                break;
+            if (isBishop && isBishop->getType() == 5 && isBishop->getside() != side)
+                return true;
+        }
         j--;
     }
     return false;
@@ -217,68 +265,94 @@ bool boardbox::checkAttackedByBishop(int side, int x, int y)
 bool boardbox::checkAttackedByPawn(int side, int x, int y)
 {
     int pace = -1 + side *2;
-    Piece isPawn = getboard()->getbox(x+1,y+pace)->getpiece();
-    if (isPawn->getType() == 4 && isPawn->getside() != side)
-        return true;
-    isPawn = getboard()->getbox(x-1,y+pace)->getpiece();
-    if (isPawn->getType() == 4 && isPawn->getside() != side)
-        return true;
+    Piece *isPawn;
+    if (getboard()->getbox(x+1,y+pace))
+    {
+        isPawn = getboard()->getbox(x+1,y+pace)->getpiece();
+        if (isPawn && isPawn->getType() == 4 && isPawn->getside() != side)
+            return true;
+    }
+    if (getboard()->getbox(x-1,y+pace))
+    {
+        isPawn = getboard()->getbox(x-1,y+pace)->getpiece();
+        if (isPawn && isPawn->getType() == 4 && isPawn->getside() != side)
+            return true;
+    }
     return false;
 }
 
 bool boardbox::checkAttackedByRook(int side, int x, int y)
 {
     int i = x, j = y;
-    Piece isRook;
+    Piece *isRook;
+    i++;
     for (;i<=7;i++)
     {
-        isRook = getboard()->getbox(i,y)->getpiece();
-        if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
-            break;
-        if (isRook && isRook->getType() == 7 && isRook->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isRook = getboard()->getbox(i,y)->getpiece();
+            if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
+                break;
+            if (isRook && isRook->getType() == 7 && isRook->getside() != side)
+                return true;
+        }
     }
     i = x;
+    i--;
     for (;i>=0;i--)
     {
-        isRook = getboard()->getbox(i,y)->getpiece();
-        if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
-            break;
-        if (isRook && isRook->getType() == 7 && isRook->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isRook = getboard()->getbox(i,y)->getpiece();
+            if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
+                break;
+            if (isRook && isRook->getType() == 7 && isRook->getside() != side)
+                return true;
+        }
     }
     i = x, j = y;
-    for (;j>=0;i--)
+    j--;
+    for (;j>=0;j--)
     {
-        isRook = getboard()->getbox(x,j)->getpiece();
-        if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
-            break;
-        if (isRook && isRook->getType() == 7 && isRook->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isRook = getboard()->getbox(x,j)->getpiece();
+            if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
+                break;
+            if (isRook && isRook->getType() == 7 && isRook->getside() != side)
+                return true;
+        }
     }
     j = y;
+    j++;
     for (;j<=7; j++)
     {
-        isRook = getboard()->getbox(x,j)->getpiece();
-        if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
-            break;
-        if (isRook && isRook->getType() == 7 && isRook->getside() != side)
-            return true;
+        if (getboard()->getbox(i,j))
+        {
+            isRook = getboard()->getbox(x,j)->getpiece();
+            if (isRook && (isRook->getType() != 7 || isRook->getside() == side))
+                break;
+            if (isRook && isRook->getType() == 7 && isRook->getside() != side)
+                return true;
+        }
     }
     return false;
 }
 
 bool boardbox::checkAttackedByKing(int side, int x, int y)
 {
-    Piece isKing;
+    Piece *isKing;
     if (x > 0)
     {
         int i = x - 1;
         for (int k =-1; k<2;k++)
         {
-            isKing = getboard()->getbox(i,y+k)->getpiece();
-            if (isKing && isKing->getType() == 9 && isKing->getside() != side)
-                return true;
+            if (getboard()->getbox(i,y+k))
+            {
+                isKing = getboard()->getbox(i,y+k)->getpiece();
+                if (isKing && isKing->getType() == 9 && isKing->getside() != side)
+                    return true;
+            }
         }
     }
     if (x < 7)
@@ -286,21 +360,32 @@ bool boardbox::checkAttackedByKing(int side, int x, int y)
         int i = x - 1;
         for (int k =-1; k<2;k++)
         {
-            isKing = getboard()->getbox(i,y+k)->getpiece();
-            if (isKing && isKing->getType() == 9 && isKing->getside() != side)
-                return true;
+            if (getboard()->getbox(i,y+k))
+            {
+                isKing = getboard()->getbox(i,y+k)->getpiece();
+                if (isKing && isKing->getType() == 9 && isKing->getside() != side)
+                    return true;
+            }
         }
     }
-    isKing = getboard()->getbox(x,y-1)->getpiece();
-    if (isKing && isKing->getType() == 9 && isKing->getside() != side)
-        return true;
-    isKing = getboard()->getbox(x,y+1)->getpiece();
-    if (isKing && isKing->getType() == 9 && isKing->getside() != side)
-        return true;
+    if (getboard()->getbox(x,y-1))
+    {
+        isKing = getboard()->getbox(x,y-1)->getpiece();
+        if (isKing && isKing->getType() == 9 && isKing->getside() != side)
+            return true;
+    }
+    if (getboard()->getbox(x,y+1))
+    {
+        isKing = getboard()->getbox(x,y+1)->getpiece();
+        if (isKing && isKing->getType() == 9 && isKing->getside() != side)
+            return true;
+    }
     return false;
 }
 
-bool boardbox::checkAttacked(int side, int x, int y)
+bool boardbox::checkAttacked(int side)
 {
+    int x = col;
+    int y = row;
     return (checkAttackedByBishop(side, x, y) || checkAttackedByKing(side, x, y) || checkAttackedByKnight(side, x, y) || checkAttackedByPawn(side, x, y) ||checkAttackedByQueen(side, x, y) || checkAttackedByRook(side ,x, y));
 }

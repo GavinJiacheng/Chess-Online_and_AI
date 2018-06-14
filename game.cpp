@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <math.h>
 #include "button.h"
+#include "gameitems/queen.h"
 
 int Piece::deadBlack = 0;
 int Piece::deadWhite = 0;
@@ -13,11 +14,11 @@ game::game(QWidget *parent):QGraphicsView(parent)
     //Making the Scene
     board = NULL;
     gameScene = new QGraphicsScene();
-    gameScene->setSceneRect(0,0,1400,900);
+    gameScene->setSceneRect(0,0,1400,950);
     piece_to_placed = NULL; // fuck you you asshole
 
     //Making the view
-    setFixedSize(1400,900);
+    setFixedSize(1400,950);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setScene(gameScene);
@@ -37,11 +38,12 @@ void game::addToScene(QGraphicsItem *item)
     gameScene->addItem(item);
 }
 
-void game::start()
+void game::start() // playagain use this
 {
     gameScene->clear();
     playOffline();
     addToScene(turnDisplay);
+    addToScene(check);
     placeTheBoard();
     placePieces();
 }
@@ -74,8 +76,8 @@ void game::placePieces()
 
 void game::mainmenu()
 {
-
     //Create the title
+    gameScene->clear();
     QGraphicsTextItem *titleText = new QGraphicsTextItem("Gavin's Chess");
     QFont titleFont("arial" , 50);
     titleText->setFont( titleFont);
@@ -98,11 +100,8 @@ void game::mainmenu()
     int qxPos = width()/2 - quitButton->boundingRect().width()/2;
     int qyPos = 375;
     quitButton->setPos(qxPos,qyPos);
-    qDebug() << "fuck bug";
     connect(quitButton, SIGNAL(clicked()),this,SLOT(close()));
-    qDebug() << "fuck bug2";
     addToScene(quitButton);
-    qDebug() << "fuck bug3";
     //listG.append(quitButton);
 }
 
@@ -133,6 +132,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
 
     if (piece_to_placed)
     {
+        int Pieceside = piece_to_placed->getside();
         if (startX < 300 || startX >= 1100)
         {
             piece_to_placed->setPos(originalPos);
@@ -149,26 +149,33 @@ void game::mouseReleaseEvent(QMouseEvent *event)
         if(piece_to_placed->pawnAttack(x,y) && targetBox->hasPiece() && targetBox->getpiece()->getside() != piece_to_placed->getside())
         {
             int diediediedie = targetBox->getpiece()->die();
-            if (!(diediediedie+1))
+            if (diediediedie+1)
             {
-                //if (diediedie)
-                //{
-                //white win
-                //}
-                //else
-                //{
-                //black win
-                //}
+                qDebug() << "Game over!";
+                gameOver(diediediedie);
+                piece_to_placed->moveTo(x,y);
+                piece_to_placed = NULL;
+                return;
             }
-            piece_to_placed->setPos(finalX,finalY);
-            piece_to_placed->setlocation(x,y);
-            piece_to_placed->moved();
-            piece_to_placed->getCurrentBox()->removepiece();
-            piece_to_placed->setCurrentBox(targetBox);
-            piece_to_placed->getCurrentBox()->placepiece(piece_to_placed);
+            piece_to_placed->moveTo(x,y);
+            if (y == 0+Pieceside*7)
+            {
+                Piece *newPiece = new queen(Pieceside,x,y);
+                newPiece->setPos(finalX, finalY);
+                board->appendPieces(newPiece);
+                gameScene->removeItem(piece_to_placed);
+                addToScene(newPiece);
+                piece_to_placed = newPiece;
+            }
             changeTurn();
             piece_to_placed = NULL;
-            if (board->checkCanCheck());
+            if (board->checkCanCheck())
+            {
+                if(!check->isVisible())
+                    check->setVisible(true);
+            }
+            else
+                check->setVisible(false);
             return;
         }
         else if(piece_to_placed->canmove(x,y))
@@ -184,8 +191,14 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 else
                 {
                     int diediediedie = targetBox->getpiece()->die();
-                    if (!(diediediedie+1))
+                    //qDebug() << diediediedie;
+                    if (diediediedie+1)
                     {
+                        qDebug() << "Game over!";
+                        gameOver(diediediedie);
+                        piece_to_placed->moveTo(x,y);
+                        piece_to_placed = NULL;
+                        return;
                         //if (diediedie)
                         //{
                         //white win
@@ -197,16 +210,26 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                     }
                 }
             }
-            piece_to_placed->setPos(finalX,finalY);
-            piece_to_placed->setlocation(x,y);
-            piece_to_placed->moved();
-            piece_to_placed->getCurrentBox()->removepiece();
-            piece_to_placed->setCurrentBox(targetBox);
-            piece_to_placed->getCurrentBox()->placepiece(piece_to_placed);
-            //moveto(finalX,finalY,targetBox);
+            piece_to_placed->moveTo(x,y);
+            if (y == 0+Pieceside*7 && piece_to_placed->getType()==4)
+            {
+                Piece *newPiece = new queen(Pieceside,x,y);
+                newPiece->setPos(finalX, finalY);
+                board->appendPieces(newPiece);
+                gameScene->removeItem(piece_to_placed);
+                addToScene(newPiece);
+                piece_to_placed = newPiece;
+            }
             changeTurn();
             piece_to_placed = NULL;
-            if (board->checkCanCheck());
+            if (board->checkCanCheck())
+            {
+                qDebug() << "check";
+                if(!check->isVisible())
+                    check->setVisible(true);
+            }
+            else
+                check->setVisible(false);
             return;
             //What the fuck are you ? QGraphicsView::mouseReleaseEvent(event);
         }
@@ -259,6 +282,15 @@ void game::playOffline()
     turnDisplay->setDefaultTextColor(Qt::white);
     turnDisplay->setFont(QFont("",20));
     turnDisplay->setPlainText("Turn : WHITE");
+
+    check = new QGraphicsTextItem();
+    check->setPos(width()/2-100,850);
+    check->setZValue(5);
+    check->setDefaultTextColor(Qt::red);
+    check->setFont(QFont("",45));
+    check->setPlainText("CHECK!");
+    check->setVisible(false);
+
 }
 
 void game::SetGamecolor()
@@ -268,4 +300,52 @@ void game::SetGamecolor()
     QColor gray(Qt::gray);
     brush.setColor(gray);
     setBackgroundBrush(brush);
+}
+
+void game::gameOver(int color)
+{
+    turn = 2;
+
+
+    QGraphicsRectItem *rect(new QGraphicsRectItem());
+    rect->setRect(0,0,450,300);
+    QBrush Abrush;
+    Abrush.setStyle(Qt::SolidPattern);
+    Abrush.setColor(QColor(199, 231, 253));
+    rect->setBrush(Abrush);
+    rect->setZValue(4);
+    int pxPos = width()/2 - rect->boundingRect().width()/2;
+    int pyPos = 250;
+    rect->setPos(pxPos,pyPos);
+    addToScene(rect);
+
+    QGraphicsTextItem *whowin;
+    if (color == 0)
+        whowin = new QGraphicsTextItem("Black win!");
+    else
+        whowin = new QGraphicsTextItem("White win!");
+    QFont titleFont("arial" , 30);
+    whowin->setFont( titleFont);
+    int axPos = width()/2 - whowin->boundingRect().width()/2;
+    int ayPos = 300;
+    whowin->setPos(axPos,ayPos);
+    whowin->setZValue(5);
+    addToScene(whowin);
+
+    button * replayButton = new button("Play Again");
+    int qxPos = width()/2 - rect->boundingRect().width()/2 + 10;
+    int qyPos = 400;
+    replayButton->setPos(qxPos,qyPos);
+    replayButton->setZValue(5);
+    connect(replayButton,SIGNAL(clicked()) , this , SLOT(start()));
+    addToScene(replayButton);
+
+    //Create Quit Button
+    button * ReturnButton = new button("Return to Mainmenu");
+    int rxPos = width()/2 + 15;
+    int ryPos = 400;
+    ReturnButton->setPos(rxPos,ryPos);
+    ReturnButton->setZValue(5);
+    connect(ReturnButton, SIGNAL(clicked()),this,SLOT(mainmenu()));
+    addToScene(ReturnButton);
 }

@@ -14,7 +14,7 @@
 extern game* Game;
 gameboard::gameboard()
 {
-
+    Checking = false;
 }
 
 gameboard::~gameboard()
@@ -27,6 +27,10 @@ gameboard::~gameboard()
             boxes[i][j] = NULL;
         }
     }
+    qDeleteAll(black);
+    black.clear();
+    qDeleteAll(white);
+    white.clear();
 }
 
 void gameboard::placeBoxes()
@@ -58,6 +62,10 @@ boardbox *gameboard::getbox(int i, int j)
 
 void gameboard::startup()
 {
+    qDeleteAll(black);
+    black.clear();
+    qDeleteAll(white);
+    white.clear();
     Piece *piece;
     //black pieces
     piece = new rook(1,0,0);
@@ -145,6 +153,20 @@ bool gameboard::checkCanCheck()
 {
     boardbox *WKingbox = WKing->getCurrentBox();
     boardbox *BKingbox = BKing->getCurrentBox();
-    return (WKingbox->checkAttacked() || BKingbox->checkAttacked());
+    Checking =(WKingbox->checkAttacked(0) || BKingbox->checkAttacked(1));
+    return (Checking);
+}
+
+int gameboard::playerSside()
+{
+    return playerside;
+}
+
+void gameboard::appendPieces(Piece* P)
+{
+    if(P->getside())
+        black.append(P);
+    else
+        white.append(P);
 }
 
