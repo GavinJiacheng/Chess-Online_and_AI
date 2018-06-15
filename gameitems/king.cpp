@@ -15,7 +15,10 @@ void king::setImage()
 
 bool king::canmove(int x, int y)
 {
-    Piece* isrook = this->getCurrentBox()->getboard()->getbox((7+(x-6)*7/4),y)->getpiece();
+    boardbox *box = this->getCurrentBox()->getboard()->getbox((7+(x-6)*7/4),y);
+    Piece* isrook = NULL;
+    if (box)
+        isrook = box->getpiece();
     if (x - location[0] <= 1 && x - location[0] >= (-1) && y-location[1] <= 1 && y - location[1] >= (-1))
             return true;
     else if (!this->Ismoved() && y == location[1] && (x == 6 || x == 2) && isrook && isrook->getType() == 7 && !isrook->Ismoved())

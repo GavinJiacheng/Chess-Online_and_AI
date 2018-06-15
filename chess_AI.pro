@@ -61,7 +61,24 @@ SOURCES += \
     gameitems/rook.cpp \
     game.cpp \
     main.cpp \
-    button.cpp
+    button.cpp \
+    gameitems/bishop.cpp \
+    gameitems/boardbox.cpp \
+    gameitems/gameboard.cpp \
+    gameitems/king.cpp \
+    gameitems/knight.cpp \
+    gameitems/pawn.cpp \
+    gameitems/piece.cpp \
+    gameitems/queen.cpp \
+    gameitems/rook.cpp \
+    release/moc_button.cpp \
+    release/moc_game.cpp \
+    release/qrc_res.cpp \
+    button.cpp \
+    game.cpp \
+    main.cpp \
+    AI_files/possible_boxnpiece.cpp \
+    AI_files/stupid_ai.cpp
 
 HEADERS += \
     game.h \
@@ -97,7 +114,21 @@ HEADERS += \
     gameitems/queen.h \
     gameitems/rook.h \
     game.h \
-    button.h
+    button.h \
+    gameitems/bishop.h \
+    gameitems/boardbox.h \
+    gameitems/gameboard.h \
+    gameitems/king.h \
+    gameitems/knight.h \
+    gameitems/pawn.h \
+    gameitems/piece.h \
+    gameitems/queen.h \
+    gameitems/rook.h \
+    release/moc_predefs.h \
+    button.h \
+    game.h \
+    AI_files/possible_boxnpiece.h \
+    AI_files/stupid_ai.h
 
 FORMS += \
         mainwindow.ui

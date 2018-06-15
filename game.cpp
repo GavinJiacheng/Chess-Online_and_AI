@@ -163,6 +163,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 Piece *newPiece = new queen(Pieceside,x,y);
                 newPiece->setPos(finalX, finalY);
                 board->appendPieces(newPiece);
+                piece_to_placed->setdie(true);
                 gameScene->removeItem(piece_to_placed);
                 addToScene(newPiece);
                 piece_to_placed = newPiece;
@@ -216,6 +217,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 Piece *newPiece = new queen(Pieceside,x,y);
                 newPiece->setPos(finalX, finalY);
                 board->appendPieces(newPiece);
+                piece_to_placed->setdie(true);
                 gameScene->removeItem(piece_to_placed);
                 addToScene(newPiece);
                 piece_to_placed = newPiece;

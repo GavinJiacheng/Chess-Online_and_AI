@@ -389,3 +389,13 @@ bool boardbox::checkAttacked(int side)
     int y = row;
     return (checkAttackedByBishop(side, x, y) || checkAttackedByKing(side, x, y) || checkAttackedByKnight(side, x, y) || checkAttackedByPawn(side, x, y) ||checkAttackedByQueen(side, x, y) || checkAttackedByRook(side ,x, y));
 }
+
+int boardbox::getCol()
+{
+    return col;
+}
+
+int boardbox::getRow()
+{
+    return row;
+}

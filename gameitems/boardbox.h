@@ -29,6 +29,8 @@ public:
     bool checkAttackedByRook(int side, int x, int y);
     bool checkAttackedByKing(int side, int x, int y);
     bool checkAttacked(int side);
+    int getCol();
+    int getRow();
     //bool IsThisBox();
 private:
     gameboard *board;

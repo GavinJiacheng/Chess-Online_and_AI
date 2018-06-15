@@ -64,6 +64,11 @@ void Piece::setWeight(int w)
     weight = w;
 }
 
+void Piece::setdie(bool t)
+{
+    isdead = t;
+}
+
 int Piece::getWeight()
 {
     return weight;
@@ -78,6 +83,16 @@ void Piece::setlocation(int x, int y)
 {
     location[0] =x;
     location[1] =y;
+}
+
+int Piece::getCol()
+{
+    return location[0];
+}
+
+int Piece::getRow()
+{
+    return location[1];
 }
 
 void Piece::moved()
@@ -114,6 +129,26 @@ void Piece::moveTo(int x, int y)
     this->setPos(xPos,yPos);
     this->setlocation(x,y);
     this->moved();
+    this->getCurrentBox()->removepiece();
+    this->setCurrentBox(targetBox);
+    this->getCurrentBox()->placepiece(this);
+}
+
+void Piece::tryToMoveTo(int x, int y)
+{
+    boardbox *targetBox = this->getCurrentBox()->getboard()->getbox(x,y);
+    targetBox->getboard()->NosupposedDie();
+    if (targetBox->hasPiece())
+    {
+        targetBox->getpiece()->setdie(true);
+        targetBox->getboard()->supposeddie(targetBox->getpiece());
+    }
+    int oldx = this->getCol();
+    int oldy = this->getRow();
+    targetBox->getboard()->triedPiece(this);
+    this->getCurrentBox()->getboard()->oldlocation[0] = oldx;
+    this->getCurrentBox()->getboard()->oldlocation[1] = oldy;
+    this->setlocation(x,y);
     this->getCurrentBox()->removepiece();
     this->setCurrentBox(targetBox);
     this->getCurrentBox()->placepiece(this);
