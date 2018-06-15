@@ -29,14 +29,14 @@ public:
     void triedPiece(Piece* P);
     void gobackThinking();
     void NosupposedDie();
+    QList <possible_boxNpiece *> possible_boxNpiece_White;
+    QList <possible_boxNpiece *> possible_boxNpiece_Black;
     int oldlocation[2];
 private:
     int playerside =0;
     boardbox *boxes[8][8];
     QList <Piece *> white;
     QList <Piece *> black;
-    QList <possible_boxNpiece *> possible_boxNpiece_White;
-    QList <possible_boxNpiece *> possible_boxNpiece_Black;
     //QList <possible_boxNpiece *> possible_castling_Black;
     //QList <possible_boxNpiece *> possible_castling_White;
     Piece *WKing;

@@ -7,11 +7,14 @@
 class stupid_AI
 {
 public:
-    stupid_AI(int side, QList <possible_boxNpiece *> itslist);
+    stupid_AI(int side);
     int AIsSide;
-    QList <possible_boxNpiece *> AIsList;
+    QList <possible_boxNpiece *> *AIsList;
     int maxvalue;
     possible_boxNpiece *current_box_piece;
+    void setList(QList <possible_boxNpiece *> *itslist);
+    possible_boxNpiece* getMove(QList <possible_boxNpiece *> *itslist);
+    possible_boxNpiece* chooseAIRandomly();
 
 };
 

@@ -107,13 +107,13 @@ void game::mainmenu()
     connect(playButton,SIGNAL(clicked()) , this , SLOT(start()));
     addToScene(playButton);
     //listG.append(playButton);
-
+/*
     button * BlackAIButton = new button("Play vs BlackAI");
-    int pxPos1 = width()/2 - BlackAIButton->boundingRect().width()/2;
-    int pyPos1 = 375;
-    BlackAIButton->setPos(pxPos1,pyPos1);
+    int pxPos = width()/2 - BlackAIButton->boundingRect().width()/2;
+    int pyPos = 375;
+    BlackAIButton->setPos(pxPos,pyPos);
     connect(BlackAIButton,SIGNAL(clicked()) , this , SLOT(startVSblackAI()));
-    addToScene(BlackAIButton);
+    addToScene(BlackAIButton); */
 
     //Create Quit Button
     button * quitButton = new button("Exit");
@@ -293,7 +293,7 @@ void game::changeTurn()
         {
             board->findPossibleMove(AIsSide);
             possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
-            if(lol->possibleMove->hasPiece() )
+            if(lol->possibleMove->hasPiece())
             {
                 int diediediedie = lol->possibleMove->getpiece()->die();
                     //qDebug() << diediediedie;
@@ -301,7 +301,7 @@ void game::changeTurn()
                     {
                         qDebug() << "Game over!";
                         gameOver(diediediedie);
-                        lol->possibleMove->getpiece()->moveTo(lol->BoxCol,lol->BoxRow);
+                        lol->possibleMove->getpiece()->moveTo(x,y);
                         lol = NULL;
                         return;
                     }

@@ -177,9 +177,9 @@ void gameboard::appendPieces(Piece* P)
 void gameboard::findPossibleMove(int side)
 {
     qDeleteAll(possible_boxNpiece_Black);
-    black.clear();
+    possible_boxNpiece_Black.clear();
     qDeleteAll(possible_boxNpiece_White);
-    white.clear();
+    possible_boxNpiece_White.clear();
     if (side)
     {
         int length = black.length();
@@ -221,20 +221,48 @@ void gameboard::checkKingsMove(Piece *P)
     int x = P->getCol() -1;
     int y = P->getRow() +1;
     for(;y>y-2;y--)
+    {
         if (getbox(x,y) && P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+        }
+    }
     x = P->getCol() +1;
     y = P->getRow() +1;
     for(;y>y-2;y--)
-        if (getbox(x,y) && P->canmove(x,y))
-            addPossibleBox(P,x,y);
+    {
+        if (getbox(x,y) && P->canmove(x,y) )
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+        }
+    }
     x = P->getCol();
     y = P->getRow() +1;
     if (getbox(x,y) && P->canmove(x,y))
-        addPossibleBox(P,x,y);
+    {
+        if (!getbox(x,y)->hasPiece())
+            addPossibleBox(P,x,y);
+        else
+            if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x,y);
+    }
     y = P->getRow() -1;
     if (getbox(x,y) && P->canmove(x,y))
-        addPossibleBox(P,x,y);
+    {
+        if (!getbox(x,y)->hasPiece())
+            addPossibleBox(P,x,y);
+        else
+            if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x,y);
+    }
 
      //Sorry, no castling!
     /*
@@ -285,7 +313,17 @@ void gameboard::checkQueensMove(Piece *P)
     for(; x <=7 && y <=7; x++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y++;
@@ -296,8 +334,18 @@ void gameboard::checkQueensMove(Piece *P)
     y--;
     for(; x <=7 && y >=0; x++)
     {
-        if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        if (P->canmove(x,y) && getbox(x,y)->getpiece()->getside() != P->getside())
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y--;
@@ -308,8 +356,18 @@ void gameboard::checkQueensMove(Piece *P)
     y--;
     for(; x >=0 && y >=0; x--)
     {
-        if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        if (P->canmove(x,y) && getbox(x,y)->getpiece()->getside() != P->getside())
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y--;
@@ -320,8 +378,18 @@ void gameboard::checkQueensMove(Piece *P)
     y++;
     for(; x >=0 && y <=7; x--)
     {
-        if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        if (P->canmove(x,y) && getbox(x,y)->getpiece()->getside() != P->getside())
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y++;
@@ -332,8 +400,18 @@ void gameboard::checkQueensMove(Piece *P)
     x--;
     for(; x >=0; x--)
     {
-        if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        if (P->canmove(x,y) && getbox(x,y)->getpiece()->getside() != P->getside())
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -342,7 +420,17 @@ void gameboard::checkQueensMove(Piece *P)
     for(; x <=7; x++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -351,7 +439,17 @@ void gameboard::checkQueensMove(Piece *P)
     for(; y <=7; y++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -360,7 +458,17 @@ void gameboard::checkQueensMove(Piece *P)
     for(; y >=0; y--)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -374,7 +482,17 @@ void gameboard::checkRooksMove(Piece *P)
     for(; x >=0; x--)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -383,7 +501,17 @@ void gameboard::checkRooksMove(Piece *P)
     for(; x <=7; x++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -392,7 +520,17 @@ void gameboard::checkRooksMove(Piece *P)
     for(; y <=7; y++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -401,7 +539,17 @@ void gameboard::checkRooksMove(Piece *P)
     for(; y >=0; y--)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
     }
@@ -412,21 +560,69 @@ void gameboard::checkKnightsMove(Piece *P)
     int x = P->getCol();
     int y = P->getRow();
     if (getbox(x+1,y+2) && P->canmove(x+1,y+2))
-        addPossibleBox(P,x+1,y+2);
+    {
+        if (!getbox(x+1,y+2)->hasPiece())
+             addPossibleBox(P,x+1,y+2);
+        else
+            if(getbox(x+1,y+2)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x+1,y+2);
+    }
     if (getbox(x+1,y-2) && P->canmove(x+1,y-2))
-        addPossibleBox(P,x+1,y-2);
+    {
+        if (!getbox(x+1,y-2)->hasPiece())
+            addPossibleBox(P,x+1,y-2);
+        else
+            if(getbox(x+1,y-2)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x+1,y-2);
+    }
     if (getbox(x-1,y+2) && P->canmove(x-1,y+2))
-        addPossibleBox(P,x-1,y+2);
+    {
+        if (!getbox(x-1,y+2)->hasPiece())
+            addPossibleBox(P,x-1,y+2);
+        else
+            if(getbox(x-1,y+2)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x-1,y+2);
+    }
     if (getbox(x-1,y-2) && P->canmove(x-1,y-2))
-        addPossibleBox(P,x-1,y-2);
+    {
+        if (!getbox(x-1,y-2)->hasPiece())
+            addPossibleBox(P,x-1,y-2);
+        else
+            if(getbox(x-1,y-2)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x-1,y-2);
+    }
     if (getbox(x+2,y+1) && P->canmove(x+2,y+1))
-        addPossibleBox(P,x+2,y+1);
+    {
+        if (!getbox(x+2,y+1)->hasPiece())
+            addPossibleBox(P,x+2,y+1);
+        else
+            if(getbox(x+2,y+1)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x+2,y+1);
+    }
     if (getbox(x+2,y-1) && P->canmove(x+2,y-1))
-        addPossibleBox(P,x+2,y-1);
+    {
+        if (!getbox(x+2,y-1)->hasPiece())
+            addPossibleBox(P,x+2,y-1);
+        else
+            if(getbox(x+2,y-1)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x+2,y-1);
+    }
     if (getbox(x-2,y+1) && P->canmove(x-2,y+1))
-        addPossibleBox(P,x-2,y+1);
+    {
+        if (!getbox(x-2,y+1)->hasPiece())
+            addPossibleBox(P,x-2,y+1);
+        else
+            if(getbox(x-2,y+1)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x-2,y+1);
+    }
     if (getbox(x-2,y-1) && P->canmove(x-2,y-1))
-        addPossibleBox(P,x-2,y-1);
+    {
+        if (!getbox(x-2,y-1)->hasPiece())
+            addPossibleBox(P,x-2,y-1);
+        else
+            if(getbox(x-2,y-1)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x-2,y-1);
+    }
 }
 
 void gameboard::checkBishopsMove(Piece *P)
@@ -438,7 +634,17 @@ void gameboard::checkBishopsMove(Piece *P)
     for(; x <=7 && y <=7; x++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y++;
@@ -450,7 +656,17 @@ void gameboard::checkBishopsMove(Piece *P)
     for(; x <=7 && y >=0; x++)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y--;
@@ -462,7 +678,17 @@ void gameboard::checkBishopsMove(Piece *P)
     for(; x >=0 && y >=0; x--)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y--;
@@ -474,7 +700,17 @@ void gameboard::checkBishopsMove(Piece *P)
     for(; x >=0 && y <=7; x--)
     {
         if (P->canmove(x,y))
-            addPossibleBox(P,x,y);
+        {
+            if (!getbox(x,y)->hasPiece())
+                addPossibleBox(P,x,y);
+            else
+            {
+                if(getbox(x,y)->getpiece()->getside()!=P->getside())
+                    addPossibleBox(P,x,y);
+                else
+                    break;
+            }
+        }
         else
             break;
         y++;
@@ -493,9 +729,17 @@ void gameboard::checkPawnsMove(Piece *P)
             addPossibleBox(P,x,y+pace+pace);
     }
     if (getbox(x+1,y+pace) && P->pawnAttack(x+1,y+pace))
-        addPossibleBox(P,x+1,y+pace);
+    {
+        if (getbox(x+1,y+pace)->hasPiece())
+            if(getbox(x+1,y+pace)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x+1,y+pace);
+    }
     if (getbox(x-1,y+pace) && P->pawnAttack(x-1,y+pace))
-        addPossibleBox(P,x-1,y+pace);
+    {
+        if (getbox(x-1,y+pace)->hasPiece())
+            if(getbox(x-1,y+pace)->getpiece()->getside()!=P->getside())
+                addPossibleBox(P,x-1,y+pace);
+    }
 }
 
 void gameboard::addPossibleBox(Piece *P,int x,int y)
@@ -524,16 +768,17 @@ void gameboard::gobackThinking()
         return;
     boardbox *oldtargetBox = getbox(oldlocation[0],oldlocation[1]);
     boardbox *targetBox = getbox(OldPiece->getCol(),OldPiece->getRow());
+    OldPiece->setlocation(oldlocation[0],oldlocation[1]);
+    targetBox->removepiece();
+    OldPiece->setCurrentBox(oldtargetBox);
+    oldtargetBox->placepiece(OldPiece);
+    OldPiece = NULL;
     if(supposedDiedPiece)
     {
         supposedDiedPiece->setdie(false);
         targetBox->placepiece(supposedDiedPiece);
         supposedDiedPiece = NULL;
     }
-    OldPiece->setlocation(oldlocation[0],oldlocation[1]);
-    OldPiece->setCurrentBox(oldtargetBox);
-    oldtargetBox->placepiece(OldPiece);
-    OldPiece = NULL;
 }
 
 void gameboard::NosupposedDie()

@@ -6,6 +6,9 @@
 #include <QMouseEvent>
 #include "gameitems/gameboard.h"
 #include "gameitems/boardbox.h"
+#include "AI_files/stupid_ai.h"
+#include "button.h"
+#include "AI_files/possible_boxnpiece.h"
 
 
 class game:public QGraphicsView
@@ -29,8 +32,11 @@ public:
     void playOffline();
     void SetGamecolor();
     void gameOver(int color);
+    stupid_AI *Siri = NULL;
+    int AIsSide = -1;
 
 public slots:
+    void startVSblackAI();
     void start();
     void mainmenu();
 

@@ -71,9 +71,6 @@ SOURCES += \
     gameitems/piece.cpp \
     gameitems/queen.cpp \
     gameitems/rook.cpp \
-    release/moc_button.cpp \
-    release/moc_game.cpp \
-    release/qrc_res.cpp \
     button.cpp \
     game.cpp \
     main.cpp \
@@ -124,7 +121,6 @@ HEADERS += \
     gameitems/piece.h \
     gameitems/queen.h \
     gameitems/rook.h \
-    release/moc_predefs.h \
     button.h \
     game.h \
     AI_files/possible_boxnpiece.h \
