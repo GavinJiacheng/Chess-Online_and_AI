@@ -75,7 +75,8 @@ SOURCES += \
     game.cpp \
     main.cpp \
     AI_files/possible_boxnpiece.cpp \
-    AI_files/stupid_ai.cpp
+    AI_files/stupid_ai.cpp \
+    AI_files/findallmovess.cpp
 
 HEADERS += \
     game.h \
@@ -124,7 +125,9 @@ HEADERS += \
     button.h \
     game.h \
     AI_files/possible_boxnpiece.h \
-    AI_files/stupid_ai.h
+    AI_files/stupid_ai.h \
+    AI_files/findallmovess.h \
+    AI_files/moves.h
 
 FORMS += \
         mainwindow.ui

@@ -188,8 +188,8 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 addToScene(newPiece);
                 piece_to_placed = newPiece;
             }
-            changeTurn();
             piece_to_placed = NULL;
+            changeTurn();
             if (board->checkCanCheck())
             {
                 if(!check->isVisible())
@@ -220,14 +220,6 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                         piece_to_placed->moveTo(x,y);
                         piece_to_placed = NULL;
                         return;
-                        //if (diediedie)
-                        //{
-                        //white win
-                        //}
-                        //else
-                        //{
-                        //black win
-                        //}
                     }
                 }
             }
@@ -242,8 +234,8 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 addToScene(newPiece);
                 piece_to_placed = newPiece;
             }
-            changeTurn();
             piece_to_placed = NULL;
+            changeTurn();
             if (board->checkCanCheck())
             {
                 if(!check->isVisible())
@@ -291,17 +283,19 @@ void game::changeTurn()
         turnDisplay->setPlainText("Turn : BLACK");
         if (turn == AIsSide)
         {
+            delay();
             board->findPossibleMove(AIsSide);
             possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
-            if(lol->possibleMove->hasPiece() )
+            if(lol->possibleMove->hasPiece())
             {
-                int diediediedie = lol->possibleMove->getpiece()->die();
+                Piece* willdie = lol->possibleMove->getpiece();
+                int diediediedie = willdie->die();
                     //qDebug() << diediediedie;
                     if (diediediedie+1)
                     {
                         qDebug() << "Game over!";
                         gameOver(diediediedie);
-                        lol->possibleMove->getpiece()->moveTo(lol->BoxCol,lol->BoxRow);
+                        lol->targetPiece->moveTo(lol->BoxCol,lol->BoxRow);
                         lol = NULL;
                         return;
                     }
@@ -394,4 +388,11 @@ void game::gameOver(int color)
     ReturnButton->setZValue(5);
     connect(ReturnButton, SIGNAL(clicked()),this,SLOT(mainmenu()));
     addToScene(ReturnButton);
+}
+
+void game::delay()
+{
+    QTime dieTime= QTime::currentTime().addSecs(1);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
 }

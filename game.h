@@ -34,6 +34,7 @@ public:
     void gameOver(int color);
     stupid_AI *Siri = NULL;
     int AIsSide = -1;
+    void delay();
 
 public slots:
     void startVSblackAI();

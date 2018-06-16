@@ -3,6 +3,7 @@
 pawn::pawn(int color, int col, int row, QGraphicsItem *parent):Piece(color, col, row, parent)
 {
     setImage();
+    this->Piece::setWeight(10*(1-2*color));
 }
 
 void pawn::setImage()

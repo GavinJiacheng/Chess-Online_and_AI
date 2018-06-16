@@ -3,6 +3,7 @@
 king::king(int color, int col, int row, QGraphicsItem *parent):Piece(color, col, row, parent)
 {
     setImage();
+    this->Piece::setWeight(900*(1-2*color));
 }
 
 void king::setImage()

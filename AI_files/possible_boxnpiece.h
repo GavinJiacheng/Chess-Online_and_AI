@@ -15,6 +15,7 @@ public:
     int PieceRow;
     int BoxCol;
     int BoxRow;
+    Piece * deadPiece;
 };
 
 #endif // POSSIBLE_BOXNPIECE_H

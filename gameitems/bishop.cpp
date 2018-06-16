@@ -3,6 +3,7 @@
 bishop::bishop(int color, int col, int row, QGraphicsItem *parent):Piece(color, col, row, parent)
 {
     setImage();
+    this->Piece::setWeight(30*(1-2*color));
 }
 
 void bishop::setImage()

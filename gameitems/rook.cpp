@@ -3,6 +3,7 @@
 rook::rook(int color, int col, int row, QGraphicsItem *parent):Piece(color, col, row, parent)
 {
     setImage();
+    this->Piece::setWeight(50*(1-2*color));
 }
 
 void rook::setImage()

@@ -9,4 +9,8 @@ possible_boxNpiece::possible_boxNpiece(Piece *P, boardbox *b)
     PieceRow = P->getRow();
     BoxCol = b->getCol();
     BoxRow = b->getRow();
+    if (b->hasPiece())
+        deadPiece = b->getpiece();
+    else
+        deadPiece = NULL;
 }

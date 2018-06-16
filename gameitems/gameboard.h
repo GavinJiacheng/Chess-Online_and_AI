@@ -4,6 +4,8 @@
 #include "boardbox.h"
 class possible_boxNpiece;
 #include "AI_files/possible_boxnpiece.h"
+class findallmovess;
+#include "AI_files/findallmovess.h"
 
 class gameboard
 {
@@ -17,6 +19,7 @@ public:
     int playerSside();
     void appendPieces(Piece* P);
     void findPossibleMove(int side);
+    void addtoboxes(findallmovess* thing);
     void checkPossiblemove(Piece *P);
     void checkKingsMove(Piece *P);
     void checkQueensMove(Piece *P);
@@ -29,9 +32,12 @@ public:
     void triedPiece(Piece* P);
     void gobackThinking();
     void NosupposedDie();
+    int** getlocalmap();
+    int** createloaclmap();
     QList <possible_boxNpiece *> possible_boxNpiece_White;
     QList <possible_boxNpiece *> possible_boxNpiece_Black;
     int oldlocation[2];
+    int **loaclmap;
 private:
     int playerside =0;
     boardbox *boxes[8][8];
