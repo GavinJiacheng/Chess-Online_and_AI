@@ -35,6 +35,8 @@ public:
     stupid_AI *Siri = NULL;
     int AIsSide = -1;
     void delay();
+    bool checking = false;
+    bool CanYouMove(int yourturn);
 
 public slots:
     void startVSblackAI();

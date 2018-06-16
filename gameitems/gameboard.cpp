@@ -153,12 +153,16 @@ void gameboard::startup()
     white.append(piece);
 }
 
-bool gameboard::checkCanCheck()
+int gameboard::checkCanCheck()
 {
     boardbox *WKingbox = WKing->getCurrentBox();
     boardbox *BKingbox = BKing->getCurrentBox();
-    Checking =(WKingbox->checkAttacked(0) || BKingbox->checkAttacked(1));
-    return (Checking);
+    if (WKingbox->checkAttacked(0))
+        return 0;
+    else if (BKingbox->checkAttacked(1))
+        return 1;
+    else
+        return -1;
 }
 
 int gameboard::playerSside()
@@ -188,6 +192,7 @@ void gameboard::findPossibleMove(int side)
 
 void gameboard::addtoboxes(findallmovess *thing)
 {
+    qDebug() << "len is" <<thing->allmoves.length();
     for (moves* visitor : thing->allmoves)
     {
         int FX = visitor->fromX;
@@ -802,7 +807,9 @@ int **gameboard::getlocalmap()
 
 int **gameboard::createloaclmap()
 {
-    delete loaclmap;
+    //for (int i =0; i<8; i++)
+    //    delete[] loaclmap[i];
+    //delete[] loaclmap;
     int **new_board=new int *[8];
     for(int i=0; i<8; ++i)
     {

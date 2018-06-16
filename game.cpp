@@ -144,7 +144,6 @@ void game::mouseReleaseEvent(QMouseEvent *event)
     int x = finalX/100-3;
     int y = finalY/100;
     finalY += 50;
-
     //if (piece_to_placed && piece_to_placed->canmove(finalPos.x(),finalPos.y())){
    //     piece_to_placed->setPos(finalPos);
     //    piece_to_placed = NULL;
@@ -168,6 +167,20 @@ void game::mouseReleaseEvent(QMouseEvent *event)
         boardbox *targetBox = getbox(x,y);
         if(piece_to_placed->pawnAttack(x,y) && targetBox->hasPiece() && targetBox->getpiece()->getside() != piece_to_placed->getside())
         {
+            piece_to_placed->tryToMoveTo(x,y);
+            if (board->checkCanCheck() == turn)
+            {
+                board->gobackThinking();
+                piece_to_placed->setPos(originalPos);
+                piece_to_placed = NULL;
+                return;
+            }
+            else if (board->checkCanCheck() == (!turn))
+                checking = true;
+            else
+                checking = false;
+            board->gobackThinking();
+
             int diediediedie = targetBox->getpiece()->die();
             if (diediediedie+1)
             {
@@ -187,20 +200,53 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 gameScene->removeItem(piece_to_placed);
                 addToScene(newPiece);
                 piece_to_placed = newPiece;
+                if (board->checkCanCheck() == (!turn))
+                    checking = true;
+                else
+                    checking = false;
+                if (checking)
+                {
+                    if(!check->isVisible())
+                        check->setVisible(true);
+                    if(!CanYouMove(!turn))
+                    {
+                        gameOver(!turn);
+                        return;
+                    }
+
+                }
             }
             piece_to_placed = NULL;
-            changeTurn();
-            if (board->checkCanCheck())
+            if (checking)
             {
                 if(!check->isVisible())
                     check->setVisible(true);
+                if(!CanYouMove(!turn))
+                {
+                    gameOver(!turn);
+                    return;
+                }
             }
             else
                 check->setVisible(false);
+            changeTurn();
             return;
         }
         else if(piece_to_placed->canmove(x,y))
         {
+            piece_to_placed->tryToMoveTo(x,y);
+            if (board->checkCanCheck() == turn)
+            {
+                board->gobackThinking();
+                piece_to_placed->setPos(originalPos);
+                piece_to_placed = NULL;
+                return;
+            }
+            else if (board->checkCanCheck() == (!turn))
+                checking = true;
+            else
+                checking = false;
+            board->gobackThinking();
             if (targetBox->hasPiece())
             {
                 if (targetBox->getpiece()->getside() == piece_to_placed->getside())
@@ -233,16 +279,36 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 gameScene->removeItem(piece_to_placed);
                 addToScene(newPiece);
                 piece_to_placed = newPiece;
+                if (board->checkCanCheck() == (!turn))
+                    checking = true;
+                else
+                    checking = false;
+                if (checking)
+                {
+                    if(!check->isVisible())
+                        check->setVisible(true);
+                    if(!CanYouMove(!turn))
+                    {
+                        gameOver(!turn);
+                        return;
+                    }
+
+                }
             }
             piece_to_placed = NULL;
-            changeTurn();
-            if (board->checkCanCheck())
+            if (checking)
             {
                 if(!check->isVisible())
                     check->setVisible(true);
+                if(!CanYouMove(!turn))
+                {
+                    gameOver(!turn);
+                    return;
+                }
             }
             else
                 check->setVisible(false);
+            changeTurn();
             return;
             //What the fuck are you ? QGraphicsView::mouseReleaseEvent(event);
         }
@@ -286,6 +352,12 @@ void game::changeTurn()
             delay();
             board->findPossibleMove(AIsSide);
             possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
+            if(lol == NULL)
+            {
+                qDebug() << "Game over!";
+                gameOver(1); //black is checked
+                return;
+            }
             if(lol->possibleMove->hasPiece())
             {
                 Piece* willdie = lol->possibleMove->getpiece();
@@ -301,11 +373,24 @@ void game::changeTurn()
                     }
             }
             lol->targetPiece->moveTo(lol->BoxCol,lol->BoxRow);
-            if (board->checkCanCheck())
+
+            if (board->checkCanCheck() == (!AIsSide))
+                checking = true;
+            else
+                checking = false;
+            if (checking)
             {
                 if(!check->isVisible())
                     check->setVisible(true);
+                if(!CanYouMove(!AIsSide))
+                {
+                    gameOver(!AIsSide);
+                    return;
+                }
+
             }
+            else
+                check->setVisible(false);
             changeTurn();
         }
     }
@@ -377,7 +462,10 @@ void game::gameOver(int color)
     int qyPos = 400;
     replayButton->setPos(qxPos,qyPos);
     replayButton->setZValue(5);
-    connect(replayButton,SIGNAL(clicked()) , this , SLOT(start()));
+    if (AIsSide == -1)
+        connect(replayButton,SIGNAL(clicked()) , this , SLOT(start()));
+    else
+        connect(replayButton,SIGNAL(clicked()) , this , SLOT(startVSblackAI()));
     addToScene(replayButton);
 
     //Create Quit Button
@@ -395,4 +483,14 @@ void game::delay()
     QTime dieTime= QTime::currentTime().addSecs(1);
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+}
+
+bool game::CanYouMove(int yourturn)
+{
+    int** map = board->createloaclmap();
+    findallmovess *yourturnsmove = new findallmovess(yourturn, map);
+    if (yourturnsmove->allmoves.length() == 0)
+        return false;
+    else
+        return true;
 }

@@ -25,6 +25,8 @@ possible_boxNpiece *stupid_AI::chooseAIRandomly()
 {
     int len = (*AIsList).length();
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
+    if (len == 0)
+        return NULL;
     int random =qrand()%len;
     possible_boxNpiece* ret = (*AIsList)[random];
     return ret;

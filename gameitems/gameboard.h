@@ -15,7 +15,7 @@ public:
     void placeBoxes();
     boardbox* getbox(int i, int j);
     void startup();
-    bool checkCanCheck();
+    int checkCanCheck();
     int playerSside();
     void appendPieces(Piece* P);
     void findPossibleMove(int side);
@@ -37,7 +37,7 @@ public:
     QList <possible_boxNpiece *> possible_boxNpiece_White;
     QList <possible_boxNpiece *> possible_boxNpiece_Black;
     int oldlocation[2];
-    int **loaclmap;
+    int **loaclmap; //should be smart pointer
 private:
     int playerside =0;
     boardbox *boxes[8][8];
