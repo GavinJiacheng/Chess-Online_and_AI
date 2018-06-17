@@ -12,7 +12,7 @@ https://github.com/subeshb1/Chess
 
 AI's idea from https://github.com/lhartikk/simple-chess-ai
 
-
+You can download and play it from [HERE] (https://github.com/Jiachenggavin/Smart_Chess/tree/release_files).
 
 # SMART AI:
 
