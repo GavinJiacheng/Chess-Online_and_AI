@@ -30,4 +30,4 @@ This program can also play as PVP:
 Of course, it can do Promotion and Castling.
 ![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/promotion.gif)
 
-![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/Castling.gif)
+![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/NewCastling.gif)
