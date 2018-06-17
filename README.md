@@ -24,6 +24,7 @@ It was a simple version and looks very stupid:
 ![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/smallend.gif)
 
 This program can also play as PVP:
+
 ![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/PvP.gif)
 
 Of course, it can do Promotion and Castling.
