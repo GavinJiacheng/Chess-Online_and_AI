@@ -215,19 +215,19 @@ int stupid_AI::evaluateBoard(BOARD maps, int side)
         for(int j=0;j<8;j++)
         {
             if (maps[i][j] == 9 || maps[i][j] == -9)
-                    value += maps[i][j]*100* sidecheck + (side ? POS.KingEvalBlack[i][j] : POS.KingEvalWhite[i][j]);
+                    value += maps[i][j]*100 + (side ? POS.KingEvalBlack[i][j] : POS.KingEvalWhite[i][j])*maps[i][j]/9;
             else if (maps[i][j] == 8 || maps[i][j] == -8)
-                value += maps[i][j]*90/8* sidecheck + POS.QueenEval[i][j];
+                value += maps[i][j]*90/8 + POS.QueenEval[i][j]*maps[i][j]/8;
             else if (maps[i][j] == 7 || maps[i][j] == -7)
-                value += maps[i][j]*50/7* sidecheck + (side ? POS.RookEvalBlack[i][j] : POS.RookEvalWhite[i][j]);
+                value += maps[i][j]*50/7 + (side ? POS.RookEvalBlack[i][j] : POS.RookEvalWhite[i][j])*maps[i][j]/7;
             else if (maps[i][j] == 6 || maps[i][j] == -6)
-                value += maps[i][j]*5* sidecheck + POS.KnightEval[i][j];
+                value += maps[i][j]*5 + POS.KnightEval[i][j]*maps[i][j]/6;
             else if (maps[i][j] == 5 || maps[i][j] == -5)
-                value += maps[i][j]*6* sidecheck + (side ? POS.BishopEvalBlack[i][j] : POS.BishopEvalWhite[i][j]);
+                value += maps[i][j]*6 + (side ? POS.BishopEvalBlack[i][j] : POS.BishopEvalWhite[i][j])*maps[i][j]/5;
             else if (maps[i][j] == 4 || maps[i][j] == -4)
-                value += maps[i][j]*10/4* sidecheck + (side ? POS.PawnEvalBlack[i][j] : POS.PawnEvalWhite[i][j]);
+                value += maps[i][j]*5/2 + (side ? POS.PawnEvalBlack[i][j] : POS.PawnEvalWhite[i][j])*maps[i][j]/4;
         }
-    return value;
+    return value*sidecheck ;
 }
 
 
