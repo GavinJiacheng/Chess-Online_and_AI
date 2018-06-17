@@ -210,6 +210,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                         check->setVisible(true);
                     if(!CanYouMove(!turn))
                     {
+                        piece_to_placed = NULL;
                         gameOver(!turn);
                         return;
                     }
@@ -289,6 +290,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                         check->setVisible(true);
                     if(!CanYouMove(!turn))
                     {
+                        piece_to_placed = NULL;
                         gameOver(!turn);
                         return;
                     }
@@ -398,6 +400,7 @@ void game::changeTurn()
             changeTurn();
         }
     }
+        qDebug() << turn;
 }
 
 void game::playOffline()
