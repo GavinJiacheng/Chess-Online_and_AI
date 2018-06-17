@@ -153,3 +153,9 @@ void Piece::tryToMoveTo(int x, int y)
     this->setCurrentBox(targetBox);
     this->getCurrentBox()->placepiece(this);
 }
+
+void Piece::Reset_DeadPieces()
+{
+    deadBlack = 0;
+    deadWhite = 0;
+}

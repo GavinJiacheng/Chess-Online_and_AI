@@ -350,8 +350,12 @@ void game::changeTurn()
         if (turn == AIsSide)
         {
             delay();
-            board->findPossibleMove(AIsSide);
-            possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
+
+            std::shared_ptr<possible_boxNpiece> lol = board->findGoodMovesOneTrun(AIsSide, Siri);
+            //for random move
+
+            //board->findPossibleMove(AIsSide); for random move
+            //possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
             if(lol == NULL)
             {
                 qDebug() << "Game over!";
@@ -487,10 +491,16 @@ void game::delay()
 
 bool game::CanYouMove(int yourturn)
 {
-    int** map = board->createloaclmap();
+    std::vector<std::vector<int>> map = board->createloaclmap();
     findallmovess *yourturnsmove = new findallmovess(yourturn, map);
     if (yourturnsmove->allmoves.length() == 0)
+    {
+        delete yourturnsmove;
         return false;
+    }
     else
+    {
+        delete yourturnsmove;
         return true;
+    }
 }

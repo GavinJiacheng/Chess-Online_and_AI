@@ -1,11 +1,16 @@
 #include "findallmovess.h"
 
 
-findallmovess::findallmovess(int SIDE, int **map)
+findallmovess::findallmovess(int SIDE, std::vector<std::vector<int>> MAP)
 {
 
     side = SIDE;
     int sidecheck = 1 - SIDE - SIDE;
+    for (int i=0; i<8; i++)
+    {
+        for (int j = 0; j <8;j++)
+                 map[i][j]=MAP[i][j];
+    }
     //Find "King's Landing"!!!
     for (int i=0; i<8; i++)
     {
@@ -24,28 +29,30 @@ findallmovess::findallmovess(int SIDE, int **map)
     {
         for (int j = 0; j <8;j++)
                  if (sidecheck * map[i][j] > 0)
-                     findMovesFor(i,j, map);
+                     findMovesFor(i,j);
     }
 }
 
-void findallmovess::findMovesFor(int x, int y, int **map)
+
+
+void findallmovess::findMovesFor(int x, int y)
 {
     int type = map[x][y];
     if (type == 9 || type == -9)
-        kingsmove(x,y,map);
+        kingsmove(x,y);
     else if (type == 8 || type == -8)
-        queensmove(x,y,map);
+        queensmove(x,y);
     else if (type == 7 || type == -7)
-        rooksmove(x,y,map);
+        rooksmove(x,y);
     else if (type == 6 || type == -6)
-        knightsmove(x,y,map);
+        knightsmove(x,y);
     else if (type == 5 || type == -5)
-        bishopsmove(x,y,map);
+        bishopsmove(x,y);
     else if (type == 4 || type == -4)
-        pawnsmove(x,y,map);
+        pawnsmove(x,y);
 }
 
-void findallmovess::kingsmove(int px, int py, int **map)
+void findallmovess::kingsmove(int px, int py)
 {
     int sidecheck;
     int P = map[px][py];
@@ -66,14 +73,29 @@ void findallmovess::kingsmove(int px, int py, int **map)
         {
                 if (map[x][y] == 0)
                 {
-                    moves* M = new moves(P, px, py, x, y, 0);
-                    int **new_board=new int *[8];
+                    std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+
+                    //  old code
+                    //int **new_board=new int *[8];
+                    //for (int i=0; i<8; i++)
+                    //{
+                    //    new_board[i] = new int[8];
+                    //    for (int j = 0; j <8;j++)
+                    //             new_board[i][j] = map[i][j];
+                    //}
+
+
+                    // new code
+                    std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                     for (int i=0; i<8; i++)
                     {
-                        new_board[i] = new int[8];
                         for (int j = 0; j <8;j++)
                                  new_board[i][j] = map[i][j];
                     }
+
+                    // are they same?
+
+
                     new_board[px][py] = 0;
                     new_board[x][y] = P;
                     if (!attacked(x,y,new_board))
@@ -86,11 +108,10 @@ void findallmovess::kingsmove(int px, int py, int **map)
                 {
                     if (map[x][y]*sidecheck == -9)
                         checking = true;
-                    moves* M = new moves(P, px, py, x, y, map[x][y]);
-                    int **new_board=new int *[8];
+                    std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                    std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                     for (int i=0; i<8; i++)
                     {
-                        new_board[i] = new int[8];
                         for (int j = 0; j <8;j++)
                                  new_board[i][j] = map[i][j];
                     }
@@ -106,13 +127,13 @@ void findallmovess::kingsmove(int px, int py, int **map)
     }
 }
 
-void findallmovess::queensmove(int x, int y, int **map)
+void findallmovess::queensmove(int x, int y)
 {
-    rooksmove(x,y,map);
-    bishopsmove(x,y,map);
+    rooksmove(x,y);
+    bishopsmove(x,y);
 }
 
-void findallmovess::rooksmove(int px, int py, int **map)
+void findallmovess::rooksmove(int px, int py)
 {
     int sidecheck;
     int P = map[px][py];
@@ -126,11 +147,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -146,11 +166,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -171,11 +190,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -191,11 +209,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -217,11 +234,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -237,11 +253,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -262,11 +277,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -282,11 +296,10 @@ void findallmovess::rooksmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -304,7 +317,7 @@ void findallmovess::rooksmove(int px, int py, int **map)
     }
 }
 
-void findallmovess::knightsmove(int px, int py, int **map)
+void findallmovess::knightsmove(int px, int py)
 {
     int sidecheck;
     int P = map[px][py];
@@ -321,11 +334,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py+2;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -341,11 +353,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -364,11 +375,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py-2;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -384,11 +394,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -411,11 +420,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py+2;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -431,11 +439,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -454,11 +461,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py-2;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -474,11 +480,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -501,11 +506,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py+1;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -521,11 +525,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -544,11 +547,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py-1;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -564,11 +566,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -591,11 +592,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py+1;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -611,11 +611,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -634,11 +633,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             y = py-1;
             if (map[x][y] == 0)
             {
-                moves* M = new moves(P, px, py, x, y, 0);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -654,11 +652,10 @@ void findallmovess::knightsmove(int px, int py, int **map)
             {
                 if (map[x][y]*sidecheck == -9)
                     checking = true;
-                moves* M = new moves(P, px, py, x, y, map[x][y]);
-                int **new_board=new int *[8];
+                std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board[i][j] = map[i][j];
                 }
@@ -674,7 +671,7 @@ void findallmovess::knightsmove(int px, int py, int **map)
     }
 }
 
-void findallmovess::bishopsmove(int px, int py, int **map)
+void findallmovess::bishopsmove(int px, int py)
 {
     int sidecheck;
     int P = map[px][py];
@@ -688,11 +685,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -708,11 +704,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -735,11 +730,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -755,11 +749,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -782,11 +775,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -802,11 +794,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -829,11 +820,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
     {
         if (map[x][y] == 0)
         {
-            moves* M = new moves(P, px, py, x, y, 0);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -849,11 +839,10 @@ void findallmovess::bishopsmove(int px, int py, int **map)
         {
             if (map[x][y]*sidecheck == -9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -872,7 +861,7 @@ void findallmovess::bishopsmove(int px, int py, int **map)
     }
 }
 
-void findallmovess::pawnsmove(int px, int py, int **map)
+void findallmovess::pawnsmove(int px, int py)
 {
     int P = map[px][py];
     int pace;
@@ -884,11 +873,10 @@ void findallmovess::pawnsmove(int px, int py, int **map)
     int y = py+pace;
     if (map[x][y] == 0)
     {
-        moves* M = new moves(P, px, py, x, y, 0);
-        int **new_board=new int *[8];
+        std::shared_ptr<moves> M (new moves(P, px, py, x, y, 0));
+        std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
         for (int i=0; i<8; i++)
         {
-            new_board[i] = new int[8];
             for (int j = 0; j <8;j++)
                      new_board[i][j] = map[i][j];
         }
@@ -904,11 +892,10 @@ void findallmovess::pawnsmove(int px, int py, int **map)
             y = py+pace+pace;
             if (map[x][y] == 0)
             {
-                moves* M1 = new moves(P, px, py, x, y, 0);
-                int **new_board1=new int *[8];
+                std::shared_ptr<moves> M1 (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board1(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board1[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board1[i][j] = map[i][j];
                 }
@@ -926,11 +913,10 @@ void findallmovess::pawnsmove(int px, int py, int **map)
             y = py+pace+pace;
             if (map[x][y] == 0)
             {
-                moves* M1 = new moves(P, px, py, x, y, 0);
-                int **new_board1=new int *[8];
+                std::shared_ptr<moves> M1 (new moves(P, px, py, x, y, map[x][y]));
+                std::vector<std::vector<int>> new_board1(8,std::vector<int>(8));
                 for (int i=0; i<8; i++)
                 {
-                    new_board1[i] = new int[8];
                     for (int j = 0; j <8;j++)
                              new_board1[i][j] = map[i][j];
                 }
@@ -952,11 +938,10 @@ void findallmovess::pawnsmove(int px, int py, int **map)
         {
             if (map[x][y]*pace == 9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -977,11 +962,10 @@ void findallmovess::pawnsmove(int px, int py, int **map)
         {
             if (map[x][y]*pace == 9)
                 checking = true;
-            moves* M = new moves(P, px, py, x, y, map[x][y]);
-            int **new_board=new int *[8];
+            std::shared_ptr<moves> M (new moves(P, px, py, x, y, map[x][y]));
+            std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
             for (int i=0; i<8; i++)
             {
-                new_board[i] = new int[8];
                 for (int j = 0; j <8;j++)
                          new_board[i][j] = map[i][j];
             }
@@ -996,7 +980,7 @@ void findallmovess::pawnsmove(int px, int py, int **map)
     }
 }
 
-bool findallmovess::attacked(int px, int py, int **map)
+bool findallmovess::attacked(int px, int py, std::vector<std::vector<int>> map)
 {
     int Enemy_Symbol;
     if(side) //what?
@@ -1209,20 +1193,16 @@ bool findallmovess::attacked(int px, int py, int **map)
 
     //king
 
-    x =px-1;
-    y =py-1;
-    if (x < 0)
-        x++;
-    if (y < 0)
-        y++;
-    for (; x < px+2; x++)
+    int Startx =px-1;
+    int Starty =py-1;
+    if (Startx < 0)
+        Startx++;
+    if (Starty < 0)
+        Starty++;
+    for (x = Startx; x < px+2 && x <8; x++)
     {
-        if (x == (px +1) && x > 7)
-            break;
-        for(; y<py+2;y++)
+        for(y = Starty; y<py+2 && y <8;y++)
         {
-                if (y == (py +1) && y > 7)
-                    break;
                 if (map[x][y] == 9*Enemy_Symbol)
                 {
                     return true;

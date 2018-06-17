@@ -22,6 +22,12 @@ button::button(QString name, QGraphicsItem *parent)
     setAcceptHoverEvents(true);
 }
 
+button::~button()
+{
+    delete text;
+    text = NULL;
+}
+
 void button::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     emit clicked();

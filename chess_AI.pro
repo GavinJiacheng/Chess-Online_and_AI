@@ -127,7 +127,8 @@ HEADERS += \
     AI_files/possible_boxnpiece.h \
     AI_files/stupid_ai.h \
     AI_files/findallmovess.h \
-    AI_files/moves.h
+    AI_files/moves.h \
+    AI_files/positioncalcuation.h
 
 FORMS += \
         mainwindow.ui

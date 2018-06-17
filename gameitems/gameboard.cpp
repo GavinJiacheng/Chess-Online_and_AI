@@ -10,6 +10,7 @@
 #include "queen.h"
 #include "rook.h"
 #include "bishop.h"
+#include "AI_files/stupid_ai.h"
 
 extern game* Game;
 gameboard::gameboard()
@@ -75,6 +76,7 @@ void gameboard::startup()
     piece = new rook(1,0,0);
     piece->setPos(300,50);
     Game->addToScene(piece);
+    piece->Reset_DeadPieces();
     black.append(piece);
     piece = new knight(1,1,0);
     piece->setPos(400,50);
@@ -184,16 +186,45 @@ void gameboard::findPossibleMove(int side)
     possible_boxNpiece_Black.clear();
     qDeleteAll(possible_boxNpiece_White);
     possible_boxNpiece_White.clear();
-    int** map = createloaclmap();
+    std::vector<std::vector<int>> map = createloaclmap();
     findallmovess *thing = new findallmovess(side, map);
+    //Cortana->findThebestMove(thing);
     addtoboxes(thing);
     delete thing;
+}
+
+
+std::shared_ptr<possible_boxNpiece> gameboard::findGoodMovesOneTrun(int side, stupid_AI *SmartGuy)
+{
+    qDeleteAll(possible_boxNpiece_Black);
+    possible_boxNpiece_Black.clear();
+    qDeleteAll(possible_boxNpiece_White);
+    possible_boxNpiece_White.clear();
+    //qDebug() << "are you OK?0";
+    std::vector<std::vector<int>> map = createloaclmap();
+    //qDebug() << "are you OK?1";
+    std::shared_ptr<MovePacket> Packet = SmartGuy->getMove(map,side);
+    if (Packet == NULL)
+        return NULL;
+    //qDebug() << "are you OK?2";
+    std::shared_ptr<moves> solution = Packet->Move;
+    //qDebug() << "are you OK?2.5";
+    int FX = solution->fromX;
+    int FY = solution->fromY;
+    int TX = solution->ToX;
+    int TY = solution->ToY;
+    //qDebug() << "FX is "<<FX<<"FY is "<<FY;
+    //qDebug() << "are you OK?2.8";
+    Piece* P = getbox(FX,FY)->getpiece();
+    //qDebug() << "are you OK?3";
+    std::shared_ptr<possible_boxNpiece> NewPos (new possible_boxNpiece(P, getbox(TX,TY)));
+    return NewPos;
 }
 
 void gameboard::addtoboxes(findallmovess *thing)
 {
     qDebug() << "len is" <<thing->allmoves.length();
-    for (moves* visitor : thing->allmoves)
+    for (std::shared_ptr<moves> visitor : thing->allmoves)
     {
         int FX = visitor->fromX;
         int FY = visitor->fromY;
@@ -800,24 +831,18 @@ void gameboard::NosupposedDie()
     supposedDiedPiece = NULL;
 }
 
-int **gameboard::getlocalmap()
+std::vector<std::vector<int>> gameboard::getlocalmap()
 {
     return loaclmap;
 }
 
-int **gameboard::createloaclmap()
+std::vector<std::vector<int>> gameboard::createloaclmap()
 {
-    //for (int i =0; i<8; i++)
-    //    delete[] loaclmap[i];
-    //delete[] loaclmap;
-    int **new_board=new int *[8];
-    for(int i=0; i<8; ++i)
+    std::vector<std::vector<int>> new_board(8,std::vector<int>(8));
+    for (int i=0; i<8; i++)
     {
-        new_board[i] = new int[8];
-        for(int j=0; j<8; ++j)
-        {
-            new_board[i][j] = 0;
-        }
+        for (int j = 0; j <8;j++)
+                 new_board[i][j] = 0;
     }
     for (Piece* targetP:black)
     {

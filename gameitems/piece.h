@@ -33,6 +33,7 @@ public:
     virtual bool pawnAttack(int x, int y);
     void moveTo(int x, int y);
     void tryToMoveTo(int x, int y);
+    void Reset_DeadPieces();
 
     //int debug;
 
