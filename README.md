@@ -1,17 +1,16 @@
 # Smart_Chess
 A Chess which is built by Qt and C++.
 
-Has a GOOD SMART AI!
+You can download and play it from [HERE](https://github.com/Jiachenggavin/Smart_Chess/tree/release_files). It has a GOOD SMART AI!
 
-The AI uses the [MiniMax](https://www.wikiwand.com/en/Minimax) algorithm.
+The AI uses the [MiniMax](https://www.wikiwand.com/en/Minimax) algorithm. Get the idea from https://github.com/lhartikk/simple-chess-ai
 
-Get some idea and information from [this tutorial](https://www.youtube.com/watch?v=9lqhMLFHj3A&list=PLMgDVIa0Pg8WrI9WmZR09xAbfXyfkqKWy)
+Get some information about Qt from [this tutorial](https://www.youtube.com/watch?v=9lqhMLFHj3A&list=PLMgDVIa0Pg8WrI9WmZR09xAbfXyfkqKWy)
 and
 https://github.com/subeshb1/Chess
 
-AI's idea from https://github.com/lhartikk/simple-chess-ai
 
-You can download and play it from [HERE](https://github.com/Jiachenggavin/Smart_Chess/tree/release_files).
+
 
 # SMART AI:
 
