@@ -28,7 +28,7 @@ game::game(QWidget *parent):QGraphicsView(parent)
 
 void game::placeTheBoard()
 {
-    board = new gameboard();
+    board = new gameboard(playerside);
     board->placeBoxes();
 }
 
@@ -40,7 +40,11 @@ void game::addToScene(QGraphicsItem *item)
 
 void game::start() // playagain use this
 {
+    delete Siri;
+    Siri =NULL;
     AIsSide = -1;
+    playerside = 0;
+    onlineGame = false;
     gameScene->clear();
     playOffline();
     addToScene(turnDisplay);
@@ -51,6 +55,10 @@ void game::start() // playagain use this
 
 void game::startVSblackAI()
 {
+    delete Siri;
+    Siri =NULL;
+    playerside = 0;
+    onlineGame = false;
     gameScene->clear();
     playOffline();
     addToScene(turnDisplay);
@@ -58,7 +66,24 @@ void game::startVSblackAI()
     placeTheBoard();
     placePieces();
     AIsSide = 1;
-    Siri = new stupid_AI(1);
+    Siri = new stupid_AI(AIsSide);
+}
+
+void game::startVSwhiteAI()
+{
+    delete Siri;
+    Siri =NULL;
+    playerside = 1;
+    gameScene->clear();
+    onlineGame = false;
+    playOffline();
+    addToScene(turnDisplay);
+    addToScene(check);
+    placeTheBoard();
+    placePieces();
+    AIsSide = 0;
+    Siri = new stupid_AI(AIsSide);
+    AIsMove();
 }
 
 boardbox *game::getbox(int i, int j)
@@ -108,17 +133,31 @@ void game::mainmenu()
     addToScene(playButton);
     //listG.append(playButton);
 
-    button * BlackAIButton = new button("Play vs BlackAI");
+    button * BlackAIButton = new button("Play as White vs AI");
     int pxPos1 = width()/2 - BlackAIButton->boundingRect().width()/2;
     int pyPos1 = 375;
     BlackAIButton->setPos(pxPos1,pyPos1);
     connect(BlackAIButton,SIGNAL(clicked()) , this , SLOT(startVSblackAI()));
     addToScene(BlackAIButton);
 
+    button * WhiteAIButton = new button("Play as Black vs AI");
+    int wxPos1 = width()/2 - WhiteAIButton->boundingRect().width()/2;
+    int wyPos1 = 450;
+    WhiteAIButton->setPos(wxPos1,wyPos1);
+    connect(WhiteAIButton,SIGNAL(clicked()) , this , SLOT(startVSwhiteAI()));
+    addToScene(WhiteAIButton);
+
+    button * Playonline = new button("Play Online");
+    int oxPos1 = width()/2 - WhiteAIButton->boundingRect().width()/2;
+    int oyPos1 = 525;
+    Playonline->setPos(oxPos1,oyPos1);
+    connect(Playonline,SIGNAL(clicked()) , this , SLOT(startVSwhiteAI()));
+    addToScene(Playonline);
+
     //Create Quit Button
     button * quitButton = new button("Exit");
     int qxPos = width()/2 - quitButton->boundingRect().width()/2;
-    int qyPos = 450;
+    int qyPos = 600;
     quitButton->setPos(qxPos,qyPos);
     connect(quitButton, SIGNAL(clicked()),this,SLOT(close()));
     addToScene(quitButton);
@@ -130,6 +169,7 @@ void game::mouseMoveEvent(QMouseEvent *event)
 {
     if (piece_to_placed){
        piece_to_placed->setPos((event->pos().x()-50),(event->pos().y()-50));
+       piece_to_placed->setZValue(10);
     }
     QGraphicsView::mouseMoveEvent(event);
 }
@@ -143,6 +183,12 @@ void game::mouseReleaseEvent(QMouseEvent *event)
     int finalY = (startY-50)/100*100;
     int x = finalX/100-3;
     int y = finalY/100;
+    if (playerside)
+    {
+        x = 7-x;
+        y = 7-y;
+    }
+    //qDebug()<<"x: "<<x<<" y: "<<y;
     finalY += 50;
     //if (piece_to_placed && piece_to_placed->canmove(finalPos.x(),finalPos.y())){
    //     piece_to_placed->setPos(finalPos);
@@ -155,12 +201,14 @@ void game::mouseReleaseEvent(QMouseEvent *event)
         if (startX < 300 || startX >= 1100)
         {
             piece_to_placed->setPos(originalPos);
+            piece_to_placed->setZValue(piece_to_placed->origin_zValue);
             piece_to_placed = NULL;
             return;
         }
         else if (startY < 50 ||startY >= 850)
         {
             piece_to_placed->setPos(originalPos);
+            piece_to_placed->setZValue(piece_to_placed->origin_zValue);
             piece_to_placed = NULL;
             return;
         }
@@ -172,6 +220,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
             {
                 board->gobackThinking();
                 piece_to_placed->setPos(originalPos);
+                piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                 piece_to_placed = NULL;
                 return;
             }
@@ -187,6 +236,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 qDebug() << "Game over!";
                 gameOver(diediediedie);
                 piece_to_placed->moveTo(x,y);
+                piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                 piece_to_placed = NULL;
                 return;
             }
@@ -210,6 +260,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                         check->setVisible(true);
                     if(!CanYouMove(!turn))
                     {
+                        piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                         piece_to_placed = NULL;
                         gameOver(!turn);
                         return;
@@ -217,6 +268,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
 
                 }
             }
+            piece_to_placed->setZValue(piece_to_placed->origin_zValue);
             piece_to_placed = NULL;
             if (checking)
             {
@@ -240,6 +292,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
             {
                 board->gobackThinking();
                 piece_to_placed->setPos(originalPos);
+                piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                 piece_to_placed = NULL;
                 return;
             }
@@ -253,6 +306,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 if (targetBox->getpiece()->getside() == piece_to_placed->getside())
                 {
                     piece_to_placed->setPos(originalPos);
+                    piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                     piece_to_placed = NULL;
                     return;
                 }
@@ -265,6 +319,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                         qDebug() << "Game over!";
                         gameOver(diediediedie);
                         piece_to_placed->moveTo(x,y);
+                        piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                         piece_to_placed = NULL;
                         return;
                     }
@@ -290,6 +345,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                         check->setVisible(true);
                     if(!CanYouMove(!turn))
                     {
+                        piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                         piece_to_placed = NULL;
                         gameOver(!turn);
                         return;
@@ -297,6 +353,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
 
                 }
             }
+            piece_to_placed->setZValue(piece_to_placed->origin_zValue);
             piece_to_placed = NULL;
             if (checking)
             {
@@ -320,6 +377,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
             //qDebug() << "o:" <<piece_to_placed->location[0] << ","<<piece_to_placed->location[1];
             //qDebug() << "f:" <<finalX/100-3 << ","<<(finalY-50)/100;
             //qDebug() << "f2:" <<x << ","<<y;
+            piece_to_placed->setZValue(piece_to_placed->origin_zValue);
             piece_to_placed = NULL;
             return;
         }
@@ -338,69 +396,73 @@ void game::setTurn(int i)
     turn = i;
 }
 
+void game::AIsMove()
+{
+    delay();
+
+    std::shared_ptr<possible_boxNpiece> lol = board->findGoodMovesOneTrun(AIsSide, Siri);
+    //for random move
+
+    //board->findPossibleMove(AIsSide); for random move
+    //possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
+    if(lol == NULL)
+    {
+        qDebug() << "Game over!";
+        gameOver(AIsSide); //white is checked
+        return;
+    }
+    if(lol->possibleMove->hasPiece())
+    {
+        Piece* willdie = lol->possibleMove->getpiece();
+        int diediediedie = willdie->die();
+            //qDebug() << diediediedie;
+            if (diediediedie+1)
+            {
+                qDebug() << "Game over!";
+                gameOver(diediediedie);
+                lol->targetPiece->moveTo(lol->BoxCol,lol->BoxRow);
+                lol = NULL;
+                return;
+            }
+    }
+    lol->targetPiece->moveTo(lol->BoxCol,lol->BoxRow);
+
+    if (board->checkCanCheck() == (!AIsSide))
+        checking = true;
+    else
+        checking = false;
+    if (checking)
+    {
+        if(!check->isVisible())
+            check->setVisible(true);
+        if(!CanYouMove(!AIsSide))
+        {
+            gameOver(!AIsSide);
+            return;
+        }
+
+    }
+    else
+        check->setVisible(false);
+    changeTurn();
+}
+
 void game::changeTurn()
 {
     if(turn)
     {
         turn = 0;
         turnDisplay->setPlainText("Turn : WHITE");
+        if (turn == AIsSide)
+            AIsMove();
     }
     else
     {
         turn = 1;
         turnDisplay->setPlainText("Turn : BLACK");
         if (turn == AIsSide)
-        {
-            delay();
-
-            std::shared_ptr<possible_boxNpiece> lol = board->findGoodMovesOneTrun(AIsSide, Siri);
-            //for random move
-
-            //board->findPossibleMove(AIsSide); for random move
-            //possible_boxNpiece *lol = Siri->getMove( &(board->possible_boxNpiece_Black));
-            if(lol == NULL)
-            {
-                qDebug() << "Game over!";
-                gameOver(1); //black is checked
-                return;
-            }
-            if(lol->possibleMove->hasPiece())
-            {
-                Piece* willdie = lol->possibleMove->getpiece();
-                int diediediedie = willdie->die();
-                    //qDebug() << diediediedie;
-                    if (diediediedie+1)
-                    {
-                        qDebug() << "Game over!";
-                        gameOver(diediediedie);
-                        lol->targetPiece->moveTo(lol->BoxCol,lol->BoxRow);
-                        lol = NULL;
-                        return;
-                    }
-            }
-            lol->targetPiece->moveTo(lol->BoxCol,lol->BoxRow);
-
-            if (board->checkCanCheck() == (!AIsSide))
-                checking = true;
-            else
-                checking = false;
-            if (checking)
-            {
-                if(!check->isVisible())
-                    check->setVisible(true);
-                if(!CanYouMove(!AIsSide))
-                {
-                    gameOver(!AIsSide);
-                    return;
-                }
-
-            }
-            else
-                check->setVisible(false);
-            changeTurn();
-        }
+            AIsMove();
     }
-        qDebug() << turn;
 }
 
 void game::playOffline()

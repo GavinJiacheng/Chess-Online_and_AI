@@ -34,6 +34,7 @@ public:
     void moveTo(int x, int y);
     void tryToMoveTo(int x, int y);
     void Reset_DeadPieces();
+    int origin_zValue = 0;
 
     //int debug;
 

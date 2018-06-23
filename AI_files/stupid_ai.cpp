@@ -35,7 +35,7 @@ std::shared_ptr<MovePacket> stupid_AI::getMove(BOARD currentMap, int AISIDE)
 std::shared_ptr<MovePacket> stupid_AI::MiniMaxRoot(int depth, BOARD currentMap, int whosTurn)
 {
     result = 0;
-    int bestValue = -9999;
+    double bestValue = -9999;
     BOARD bestmap = {{}};
     int index =0;
     int moveID = -1;
@@ -44,7 +44,7 @@ std::shared_ptr<MovePacket> stupid_AI::MiniMaxRoot(int depth, BOARD currentMap, 
         return NULL;
     for (BOARD maps : AllWeCanDo->allmaps)
     {
-        int currentValue = MiniMax(depth -1, maps, -10000, 10000, false, !whosTurn);
+        double currentValue = MiniMax(depth -1, maps, -10000, 10000, false, !whosTurn);
         if(currentValue > bestValue)
         {
             bestValue= currentValue;
@@ -72,15 +72,15 @@ std::shared_ptr<MovePacket> stupid_AI::MiniMaxRoot(int depth, BOARD currentMap, 
     return retPacket;
 }
 
-int stupid_AI::MiniMax(int restDepth, BOARD map, int alpha, int beta, bool isMaximisingPlayer, int side)
+double stupid_AI::MiniMax(int restDepth, BOARD map, double alpha, double beta, bool isMaximisingPlayer, int side)
 {
     result ++;
     if(restDepth ==0)
-        return evaluateBoard(map, AIsSide);
+        return evaluateBoard(map, AIsSide); //we need to calcuate AI's side.
     std::shared_ptr<findallmovess> AllNewMoves (new findallmovess(side,map));
     if (isMaximisingPlayer)
     {
-        int bestmove = -9999;
+        double bestmove = -9999;
         for (BOARD maps : AllNewMoves->allmaps)
         {
             bestmove = std::max(bestmove, MiniMax(restDepth -1, maps, alpha, beta, !isMaximisingPlayer, !side));
@@ -92,7 +92,7 @@ int stupid_AI::MiniMax(int restDepth, BOARD map, int alpha, int beta, bool isMax
     }
     else
     {
-        int bestmove = 9999;
+        double bestmove = 9999;
         for (BOARD maps : AllNewMoves->allmaps)
         {
             bestmove = std::min(bestmove, MiniMax(restDepth -1, maps, alpha, beta, !isMaximisingPlayer, !side));
@@ -215,17 +215,17 @@ int stupid_AI::evaluateBoard(BOARD maps, int side)
         for(int j=0;j<8;j++)
         {
             if (maps[i][j] == 9 || maps[i][j] == -9)
-                    value += maps[i][j]*100 + (side ? POS.KingEvalBlack[i][j] : POS.KingEvalWhite[i][j])*maps[i][j]/9;
+                    value += maps[i][j]*100 + ((maps[i][j] <0) ? POS.KingEvalBlack[i][j] : POS.KingEvalWhite[i][j])*maps[i][j]/9;
             else if (maps[i][j] == 8 || maps[i][j] == -8)
                 value += maps[i][j]*90/8 + POS.QueenEval[i][j]*maps[i][j]/8;
             else if (maps[i][j] == 7 || maps[i][j] == -7)
-                value += maps[i][j]*50/7 + (side ? POS.RookEvalBlack[i][j] : POS.RookEvalWhite[i][j])*maps[i][j]/7;
+                value += maps[i][j]*50/7 + ((maps[i][j] <0) ? POS.RookEvalBlack[i][j] : POS.RookEvalWhite[i][j])*maps[i][j]/7;
             else if (maps[i][j] == 6 || maps[i][j] == -6)
                 value += maps[i][j]*5 + POS.KnightEval[i][j]*maps[i][j]/6;
             else if (maps[i][j] == 5 || maps[i][j] == -5)
-                value += maps[i][j]*6 + (side ? POS.BishopEvalBlack[i][j] : POS.BishopEvalWhite[i][j])*maps[i][j]/5;
+                value += maps[i][j]*6 + ((maps[i][j] <0) ? POS.BishopEvalBlack[i][j] : POS.BishopEvalWhite[i][j])*maps[i][j]/5;
             else if (maps[i][j] == 4 || maps[i][j] == -4)
-                value += maps[i][j]*5/2 + (side ? POS.PawnEvalBlack[i][j] : POS.PawnEvalWhite[i][j])*maps[i][j]/4;
+                value += maps[i][j]*5/2 + ((maps[i][j] <0) ? POS.PawnEvalBlack[i][j] : POS.PawnEvalWhite[i][j])*maps[i][j]/4;
         }
     return value*sidecheck ;
 }

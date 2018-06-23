@@ -14,6 +14,7 @@ class gameboard
 {
 public:
     gameboard();
+    gameboard(int i);
     ~gameboard();
     void placeBoxes();
     boardbox* getbox(int i, int j);
@@ -60,6 +61,7 @@ private:
     //Piece *lastROOK;
     boardbox *lastbox;
     bool Checking;
+    int inverse(int i);
 };
 
 #endif // GAMEBOARD_H

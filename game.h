@@ -40,8 +40,10 @@ public:
 
 public slots:
     void startVSblackAI();
+    void startVSwhiteAI();
     void start();
     void mainmenu();
+
 
 
 private:
@@ -52,6 +54,9 @@ private:
     Piece* piece_to_placed;
     int turn; // 1 =black, 0 = white
     QGraphicsTextItem * turnDisplay;
+    int playerside = 0;
+    bool onlineGame = false;
+    void AIsMove();
 };
 
 #endif // GAME_H

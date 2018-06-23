@@ -35,7 +35,7 @@ public:
     possible_boxNpiece* getMove(QList <possible_boxNpiece *> *itslist);
     std::shared_ptr<MovePacket> getMove(BOARD currentMap, int AISIDE);
     std::shared_ptr<MovePacket> MiniMaxRoot(int depth, BOARD currentMap, int whosTurn);
-    int MiniMax(int restDepth, BOARD map,  int alpha, int beta, bool isMaximisingPlayer, int side);
+    double MiniMax(int restDepth, BOARD map,  double alpha, double beta, bool isMaximisingPlayer, int side);
     possible_boxNpiece* chooseAIRandomly();
     std::shared_ptr<MovePacket> findThebestMoveFromOneBoard(std::shared_ptr<findallmovess> HEY);
     std::shared_ptr<moves> findThebestMoveWithoutSearch(findallmovess* AllMoves);

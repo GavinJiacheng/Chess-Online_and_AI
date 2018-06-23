@@ -19,6 +19,7 @@ void Piece::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         if (Game != NULL)
             Game->pickUpPieces(this);
+            origin_zValue = this->zValue();
             //qDebug() << Game->piece_to_placed->debug;
     }
 }
@@ -119,7 +120,10 @@ void Piece::moveTo(int x, int y)
 {
     int xPos, yPos;
     if(this->getCurrentBox()->getboard()->playerSside())
-    {}
+    {
+        xPos = (10-x)*100;
+        yPos = 750-y*100;
+    }
     else
     {
         xPos = (x+3)*100;
