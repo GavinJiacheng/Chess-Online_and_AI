@@ -16,4 +16,8 @@
     <qresource prefix="/mainmenu">
         <file>images/mainmenu.png</file>
     </qresource>
+    <qresource prefix="/online">
+        <file>images/Playing.png</file>
+        <file>images/Waiting.png</file>
+    </qresource>
 </RCC>

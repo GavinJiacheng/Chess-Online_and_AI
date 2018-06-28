@@ -151,7 +151,7 @@ void game::mainmenu()
     int oxPos1 = width()/2 - WhiteAIButton->boundingRect().width()/2;
     int oyPos1 = 525;
     Playonline->setPos(oxPos1,oyPos1);
-    connect(Playonline,SIGNAL(clicked()) , this , SLOT(startVSwhiteAI()));
+    connect(Playonline,SIGNAL(clicked()) , this , SLOT(openGameHall()));
     addToScene(Playonline);
 
     //Create Quit Button
@@ -162,6 +162,18 @@ void game::mainmenu()
     connect(quitButton, SIGNAL(clicked()),this,SLOT(close()));
     addToScene(quitButton);
     //listG.append(quitButton);
+}
+
+void game::openGameHall()
+{
+    delete hall;
+    hall = NULL;
+    hall = new gameHall();
+    if (!hall->connectError)
+    {
+        hall->show();
+        hide();
+    }
 }
 
 

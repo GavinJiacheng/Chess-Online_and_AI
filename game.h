@@ -9,6 +9,7 @@
 #include "AI_files/stupid_ai.h"
 #include "button.h"
 #include "AI_files/possible_boxnpiece.h"
+#include "onlineGame/gamehall.h"
 
 
 class game:public QGraphicsView
@@ -43,10 +44,12 @@ public slots:
     void startVSwhiteAI();
     void start();
     void mainmenu();
+    void openGameHall();
 
 
 
 private:
+    gameHall *hall = NULL;
     QGraphicsTextItem *check;
     QGraphicsScene* gameScene;
     gameboard *board;

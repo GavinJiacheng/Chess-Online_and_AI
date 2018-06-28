@@ -76,7 +76,44 @@ SOURCES += \
     main.cpp \
     AI_files/possible_boxnpiece.cpp \
     AI_files/stupid_ai.cpp \
-    AI_files/findallmovess.cpp
+    AI_files/findallmovess.cpp \
+    AI_files/findallmovess.cpp \
+    AI_files/possible_boxnpiece.cpp \
+    AI_files/stupid_ai.cpp \
+    gameitems/bishop.cpp \
+    gameitems/boardbox.cpp \
+    gameitems/gameboard.cpp \
+    gameitems/king.cpp \
+    gameitems/knight.cpp \
+    gameitems/pawn.cpp \
+    gameitems/piece.cpp \
+    gameitems/queen.cpp \
+    gameitems/rook.cpp \
+    onlineGame/gamehall.cpp \
+    button.cpp \
+    game.cpp \
+    main.cpp \
+    onlineGame/chessroom.cpp \
+    onlineGame/chatroom.cpp \
+    AI_files/findallmovess.cpp \
+    AI_files/possible_boxnpiece.cpp \
+    AI_files/stupid_ai.cpp \
+    gameitems/bishop.cpp \
+    gameitems/boardbox.cpp \
+    gameitems/gameboard.cpp \
+    gameitems/king.cpp \
+    gameitems/knight.cpp \
+    gameitems/pawn.cpp \
+    gameitems/piece.cpp \
+    gameitems/queen.cpp \
+    gameitems/rook.cpp \
+    onlineGame/chatroom.cpp \
+    onlineGame/chessroom.cpp \
+    onlineGame/gamehall.cpp \
+    button.cpp \
+    game.cpp \
+    main.cpp \
+    cJSON/cJSON.c
 
 HEADERS += \
     game.h \
@@ -128,7 +165,48 @@ HEADERS += \
     AI_files/stupid_ai.h \
     AI_files/findallmovess.h \
     AI_files/moves.h \
-    AI_files/positioncalcuation.h
+    AI_files/positioncalcuation.h \
+    AI_files/findallmovess.h \
+    AI_files/moves.h \
+    AI_files/positioncalcuation.h \
+    AI_files/possible_boxnpiece.h \
+    AI_files/stupid_ai.h \
+    gameitems/bishop.h \
+    gameitems/boardbox.h \
+    gameitems/gameboard.h \
+    gameitems/king.h \
+    gameitems/knight.h \
+    gameitems/pawn.h \
+    gameitems/piece.h \
+    gameitems/queen.h \
+    gameitems/rook.h \
+    onlineGame/gamehall.h \
+    button.h \
+    game.h \
+    onlineGame/chessroom.h \
+    onlineGame/chatroom.h \
+    onlineGame/message.h \
+    AI_files/findallmovess.h \
+    AI_files/moves.h \
+    AI_files/positioncalcuation.h \
+    AI_files/possible_boxnpiece.h \
+    AI_files/stupid_ai.h \
+    cJSON/cJSON.h \
+    gameitems/bishop.h \
+    gameitems/boardbox.h \
+    gameitems/gameboard.h \
+    gameitems/king.h \
+    gameitems/knight.h \
+    gameitems/pawn.h \
+    gameitems/piece.h \
+    gameitems/queen.h \
+    gameitems/rook.h \
+    onlineGame/chatroom.h \
+    onlineGame/chessroom.h \
+    onlineGame/gamehall.h \
+    onlineGame/message.h \
+    button.h \
+    game.h
 
 FORMS += \
         mainwindow.ui
