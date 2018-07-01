@@ -89,7 +89,6 @@ SOURCES += \
     gameitems/piece.cpp \
     gameitems/queen.cpp \
     gameitems/rook.cpp \
-    onlineGame/gamehall.cpp \
     button.cpp \
     game.cpp \
     main.cpp \
@@ -109,11 +108,11 @@ SOURCES += \
     gameitems/rook.cpp \
     onlineGame/chatroom.cpp \
     onlineGame/chessroom.cpp \
-    onlineGame/gamehall.cpp \
     button.cpp \
     game.cpp \
     main.cpp \
-    cJSON/cJSON.c
+    cJSON/cJSON.c \
+    onlineGame/gamelobby.cpp
 
 HEADERS += \
     game.h \
@@ -180,7 +179,6 @@ HEADERS += \
     gameitems/piece.h \
     gameitems/queen.h \
     gameitems/rook.h \
-    onlineGame/gamehall.h \
     button.h \
     game.h \
     onlineGame/chessroom.h \
@@ -203,10 +201,11 @@ HEADERS += \
     gameitems/rook.h \
     onlineGame/chatroom.h \
     onlineGame/chessroom.h \
-    onlineGame/gamehall.h \
     onlineGame/message.h \
     button.h \
-    game.h
+    game.h \
+    onlineGame/onlinemove.h \
+    onlineGame/gamelobby.h
 
 FORMS += \
         mainwindow.ui

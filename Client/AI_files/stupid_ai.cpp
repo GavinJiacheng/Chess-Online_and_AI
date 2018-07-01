@@ -1,6 +1,8 @@
 #include "stupid_ai.h"
 
 
+//This has a bug if the AI only has 2 steps to move;
+
 typedef std::vector<std::vector<int>> BOARD;
 
 stupid_AI::stupid_AI(int side)

@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QGridLayout>
 
-#include "gamehall.h"
+#include "gamelobby.h"
 #include "message.h"
 
 
@@ -16,8 +16,8 @@ class Chatroom: public QDialog
 {
     Q_OBJECT
 public:
-    friend class gameHall;
-    Chatroom(gameHall *parent,Qt::WindowFlags f=0);
+    friend class gameLobby;
+    Chatroom(gameLobby *parent,Qt::WindowFlags f=0);
     QListWidget *contentListWidget;
     QLabel *userNameLabel;
     QLineEdit *userNameLineEdit;
@@ -28,7 +28,7 @@ public:
     bool status;
     QString userName;
     void Showmessage(char* String);
-    friend class gameHall;
+    friend class gameLobby;
     friend class ChessRoom;
 
     //~Chatroom();
@@ -37,7 +37,7 @@ private slots:
     void CreateRoom();
     //void CreateChessRoom();
 private:
-    gameHall* Parent;
+    gameLobby* Parent;
 
 };
 

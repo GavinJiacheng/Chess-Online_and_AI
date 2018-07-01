@@ -1,9 +1,9 @@
 #include "chessroom.h"
 
 
-ChessRoom::ChessRoom(gameHall *hall, QString Name, int ID, bool isplay, QGraphicsItem *parent)
+ChessRoom::ChessRoom(gameLobby *Lobby, QString Name, int ID, bool isplay, QGraphicsItem *parent)
 {
-    this->gamehall = hall;
+    this->Lobby = Lobby;
     this->name = Name;
     this->ID = ID;
     this->isPlaying = isplay;
@@ -19,7 +19,20 @@ ChessRoom::ChessRoom(gameHall *hall, QString Name, int ID, bool isplay, QGraphic
     int xPos = 200 - HostsName->boundingRect().width()/2;
     int yPos = 160;
     HostsName->setPos(xPos,yPos);
+
     qDebug() << "ID is: " <<ID<<" name is: "<<Name;
+}
+
+void ChessRoom::player2(QString player2name)
+{
+    if  (isPlaying)
+    {
+        this->p2name = player2name;
+        P2Name = new QGraphicsTextItem(p2name,this); // button is the parent of this text
+        int xPos = 15;
+        int yPos = 160;
+        P2Name->setPos(xPos,yPos);
+    }
 }
 
 void ChessRoom::mousePressEvent(QGraphicsSceneMouseEvent *event)

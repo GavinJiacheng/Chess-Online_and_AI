@@ -4,12 +4,14 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMouseEvent>
+#include <QCloseEvent>
 #include "gameitems/gameboard.h"
 #include "gameitems/boardbox.h"
 #include "AI_files/stupid_ai.h"
 #include "button.h"
 #include "AI_files/possible_boxnpiece.h"
-#include "onlineGame/gamehall.h"
+#include "onlineGame/gamelobby.h"
+#include "onlineGame/onlinemove.h"
 
 
 class game:public QGraphicsView
@@ -38,18 +40,27 @@ public:
     void delay();
     bool checking = false;
     bool CanYouMove(int yourturn);
+    bool onlineGame = false;
+    friend class Piece;
 
 public slots:
     void startVSblackAI();
     void startVSwhiteAI();
     void start();
     void mainmenu();
-    void openGameHall();
+    void openGameLobby();
+    void backToLobby();
+    void SHOW();
+    void palyAsWhiteOnline();
+    void palyAsBlackOnline();
+    void receiveMove(onlineMove*);
 
+protected:
+    void closeEvent(QCloseEvent *event);
 
 
 private:
-    gameHall *hall = NULL;
+    gameLobby *Lobby = NULL;
     QGraphicsTextItem *check;
     QGraphicsScene* gameScene;
     gameboard *board;
@@ -58,7 +69,6 @@ private:
     int turn; // 1 =black, 0 = white
     QGraphicsTextItem * turnDisplay;
     int playerside = 0;
-    bool onlineGame = false;
     void AIsMove();
 };
 

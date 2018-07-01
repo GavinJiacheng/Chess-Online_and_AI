@@ -1,5 +1,5 @@
-#ifndef GAMEHALL_H
-#define GAMEHALL_H
+#ifndef GAMELOBBY_H
+#define GAMELOBBY_H
 
 
 
@@ -8,40 +8,59 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMouseEvent>
+#include <QCloseEvent>
 #include <cstring>
 #include <WinSock2.h>
 #include <windows.h>
 #include <process.h>
 
+
 #include "cJSON/cJSON.h"
 #include "chatroom.h"
 #include "chessroom.h"
+#include "onlinemove.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
-
-
-
-
-class gameHall:public QGraphicsView
+class gameLobby:public QGraphicsView
 {
     Q_OBJECT
 public:
-    gameHall(QWidget *parent = NULL);
-    ~gameHall();
+    gameLobby(QWidget *parent =0);
+    ~gameLobby();
     bool connectError = false;
     void connectToServer();
     static bool is_opened;
     bool CloseConnection();
+    bool sendMove(int FromX, int FromY, int ToX, int ToY);
+    bool sendMove(int FromX, int FromY, int ToX, int ToY, int castling);
     friend class Chatroom;
     friend class ChessRoom;
+    friend class game;
+    int yourSide = -1;
+    //SignaL_XXXX means send signal for XXXX
+    void Signal_socketClosed();
+    void Signal_socketClosedfailed();
+    void Signal_TimeoutJoin();
+    bool backToLobby();
 
 signals:
     void updateRooms(cJSON *Lists);
+    void socketClosed();
+    void socketClosedfailed();
+    void TimeoutJoin();
+    void someoneLeave();
+    void ShowGame();
+    void PlayWhite();
+    void PlayBlack();
+    void moveTo(onlineMove*); // need to be done
+    void Full();
+    void RoomClose(); // need to be done;
+    void ListFull();
 
-public slots:
-    //void ChosseRoom();
-    //void Exit();
+protected:
+    void closeEvent(QCloseEvent *event);
+
 private:
     int prot = 1111;
     static void ClientThread();
@@ -52,6 +71,7 @@ private:
     SOCKET Connection;
     int numOfRooms = 0;
     bool inRooms = false;
+    bool host = false;
     bool waiting = false;
     bool connection = false;
     QGraphicsScene* OnlineScene;
@@ -61,16 +81,28 @@ private:
     Chatroom* chRoom;
     void SendRequestForJoining(int ID);
     QList <ChessRoom*> chessroomS;
-        void showRooms();
+    void exitLobby();
+    void showRooms();
+    void LobbySUI();
+    //void waitingForJoin(); //nedd to be done
+    //void CancelWaiting(); //need to be done
         //void sendMessage(string message);
 
 public slots:
     void createRoomsList(cJSON *Lists);
     void sendJointRequest(int ID);
-
+    void ServerClose();
+    void SocketBugs();
+    void JoinTimeOut();
+    void Leave();
+    void List_is_full();
+    void This_Game_isFull();
+    void I_wannaPlayAgain();
+    void ReturnToMenu();
+    //void CancelHost();
 
 
 };
 
 
-#endif // GAMEHALL_H
+#endif // GAMELOBBY_H

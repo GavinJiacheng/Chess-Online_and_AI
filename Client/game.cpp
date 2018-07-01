@@ -26,6 +26,7 @@ game::game(QWidget *parent):QGraphicsView(parent)
 
 }
 
+
 void game::placeTheBoard()
 {
     board = new gameboard(playerside);
@@ -114,6 +115,10 @@ void game::placePieces()
 
 void game::mainmenu()
 {
+    delete Siri;
+    Siri =NULL;
+    playerside = 0;
+    onlineGame = false;
     //Create the title
     gameScene->clear();
     QGraphicsTextItem *titleText = new QGraphicsTextItem("Gavin's Chess");
@@ -151,7 +156,7 @@ void game::mainmenu()
     int oxPos1 = width()/2 - WhiteAIButton->boundingRect().width()/2;
     int oyPos1 = 525;
     Playonline->setPos(oxPos1,oyPos1);
-    connect(Playonline,SIGNAL(clicked()) , this , SLOT(openGameHall()));
+    connect(Playonline,SIGNAL(clicked()) , this , SLOT(openGameLobby()));
     addToScene(Playonline);
 
     //Create Quit Button
@@ -164,16 +169,39 @@ void game::mainmenu()
     //listG.append(quitButton);
 }
 
-void game::openGameHall()
+void game::openGameLobby()
 {
-    delete hall;
-    hall = NULL;
-    hall = new gameHall();
-    if (!hall->connectError)
+    delete Lobby;
+    Lobby = NULL;
+    Lobby = new gameLobby();
+    if (!Lobby->connectError)
     {
-        hall->show();
+        Lobby->show();
         hide();
     }
+    else
+    {
+        delete Lobby;
+        Lobby = NULL;
+    }
+}
+
+void game::backToLobby()
+{
+    playerside = 0;
+    onlineGame = true;
+    mainmenu();
+    hide();
+    Lobby->yourSide = -1;
+    Lobby->inRooms = false;
+    Lobby->waiting = false;
+    Lobby->host = false;
+    Lobby->backToLobby();
+}
+
+void game::SHOW()
+{
+    show();
 }
 
 
@@ -247,10 +275,32 @@ void game::mouseReleaseEvent(QMouseEvent *event)
             {
                 qDebug() << "Game over!";
                 gameOver(diediediedie);
+                if (onlineGame)
+                {
+                    if(!Lobby->sendMove(piece_to_placed->getCol(),piece_to_placed->getRow(),x,y))
+                    {
+                        piece_to_placed->setPos(originalPos);
+                        piece_to_placed->setZValue(piece_to_placed->origin_zValue);
+                        piece_to_placed = NULL;
+                        return;
+                    }
+
+                }
                 piece_to_placed->moveTo(x,y);
                 piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                 piece_to_placed = NULL;
                 return;
+            }
+            if (onlineGame)
+            {
+                if(!Lobby->sendMove(piece_to_placed->getCol(),piece_to_placed->getRow(),x,y))
+                {
+                    piece_to_placed->setPos(originalPos);
+                    piece_to_placed->setZValue(piece_to_placed->origin_zValue);
+                    piece_to_placed = NULL;
+                    return;
+                }
+
             }
             piece_to_placed->moveTo(x,y);
             if (y == 0+Pieceside*7)
@@ -330,7 +380,46 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                     {
                         qDebug() << "Game over!";
                         gameOver(diediediedie);
+                        if (onlineGame)
+                        {
+                            if(!Lobby->sendMove(piece_to_placed->getCol(),piece_to_placed->getRow(),x,y))
+                            {
+                                piece_to_placed->setPos(originalPos);
+                                piece_to_placed->setZValue(piece_to_placed->origin_zValue);
+                                piece_to_placed = NULL;
+                                return;
+                            }
+
+                        }
                         piece_to_placed->moveTo(x,y);
+                        piece_to_placed->setZValue(piece_to_placed->origin_zValue);
+                        piece_to_placed = NULL;
+                        return;
+                    }
+                }
+            }
+            if (onlineGame)
+            {
+                if (piece_to_placed->getType() == 9 && piece_to_placed->getCol() == 4 && (x == 2 || x == 6))
+                {
+                    int castling = -1;
+                    if (x == 2)
+                        castling = 0;
+                    else
+                        castling = 7;
+                    if(!Lobby->sendMove(piece_to_placed->getCol(),piece_to_placed->getRow(),x,y, castling))
+                    {
+                        piece_to_placed->setPos(originalPos);
+                        piece_to_placed->setZValue(piece_to_placed->origin_zValue);
+                        piece_to_placed = NULL;
+                        return;
+                    }
+                }
+                else
+                {
+                    if(!Lobby->sendMove(piece_to_placed->getCol(),piece_to_placed->getRow(),x,y))
+                    {
+                        piece_to_placed->setPos(originalPos);
                         piece_to_placed->setZValue(piece_to_placed->origin_zValue);
                         piece_to_placed = NULL;
                         return;
@@ -543,20 +632,37 @@ void game::gameOver(int color)
     int qyPos = 400;
     replayButton->setPos(qxPos,qyPos);
     replayButton->setZValue(5);
-    if (AIsSide == -1)
+    if (onlineGame)
+        connect(replayButton,SIGNAL(clicked()) , Lobby , SLOT(I_wannaPlayAgain()));
+    else if (AIsSide == -1)
         connect(replayButton,SIGNAL(clicked()) , this , SLOT(start()));
     else
         connect(replayButton,SIGNAL(clicked()) , this , SLOT(startVSblackAI()));
     addToScene(replayButton);
 
     //Create Quit Button
-    button * ReturnButton = new button("Return to Mainmenu");
-    int rxPos = width()/2 + 15;
-    int ryPos = 400;
-    ReturnButton->setPos(rxPos,ryPos);
-    ReturnButton->setZValue(5);
-    connect(ReturnButton, SIGNAL(clicked()),this,SLOT(mainmenu()));
-    addToScene(ReturnButton);
+    if (onlineGame)
+    {
+        button * ReturnButton = new button("Return to the Lobby");
+        int rxPos = width()/2 + 15;
+        int ryPos = 400;
+        ReturnButton->setPos(rxPos,ryPos);
+        ReturnButton->setZValue(5);
+        //TO DO:
+        // send message :exit
+        connect(ReturnButton, SIGNAL(clicked()),this,SLOT(backToLobby()));
+        addToScene(ReturnButton);
+    }
+    else
+    {
+        button * ReturnButton = new button("Return to Mainmenu");
+        int rxPos = width()/2 + 15;
+        int ryPos = 400;
+        ReturnButton->setPos(rxPos,ryPos);
+        ReturnButton->setZValue(5);
+        connect(ReturnButton, SIGNAL(clicked()),this,SLOT(mainmenu()));
+        addToScene(ReturnButton);
+    }
 }
 
 void game::delay()
@@ -581,3 +687,112 @@ bool game::CanYouMove(int yourturn)
         return true;
     }
 }
+
+void game::receiveMove(onlineMove* move)
+{
+    int fromX = move->fromX;
+    int fromY = move->fromY;
+    int x = move->ToX;
+    int y = move->ToY;
+    int Cast = move->Castling;
+    delete move;
+    boardbox *Piecesbox = board->getbox(fromX,fromY);
+
+    boardbox *targetBox = board->getbox(x,y);
+    Piece *targetPiece = Piecesbox->getpiece();
+
+    if (targetBox->hasPiece())
+    {
+        int diediediedie = targetBox->getpiece()->die();
+        if (diediediedie+1)
+        {
+            qDebug() << "Game over!";
+            gameOver(diediediedie);
+            targetPiece->moveTo(x,y);
+            return;
+        }
+    }
+
+    if (Cast >= 0)
+    {
+        Piece * rook = board->getbox(Cast,fromY)->getpiece();
+        int rookX;
+        if (Cast == 0)
+            rookX = 3;
+        else
+            rookX = 5;
+        rook->moveTo(rookX, fromY);
+    }
+    targetPiece->moveTo(x,y);
+
+    if (board->checkCanCheck() == (!turn))
+        checking = true;
+    else
+        checking = false;
+
+    int Pieceside = targetPiece->getside();
+    if (y == 0+Pieceside*7 && targetPiece->getType() == 4)
+    {
+        Piece *newPiece = new queen(Pieceside,x,y);
+        newPiece->setPos(targetPiece->pos().x(), targetPiece->pos().y());
+        board->appendPieces(newPiece);
+        targetPiece->setdie(true);
+        gameScene->removeItem(targetPiece);
+        addToScene(newPiece);
+        if (board->checkCanCheck() == (!turn))
+            checking = true;
+        else
+            checking = false;
+    }
+    if (checking)
+    {
+        if(!check->isVisible())
+            check->setVisible(true);
+        if(!CanYouMove(!turn))
+        {
+            gameOver(!turn);
+            return;
+        }
+    }
+    else
+        check->setVisible(false);
+    changeTurn();
+}
+
+void game::closeEvent(QCloseEvent *event)
+{
+    if (Lobby)
+        Lobby->close();
+}
+
+void game::palyAsWhiteOnline()
+{
+    delete Siri;
+    Siri =NULL;
+    AIsSide = -1;
+    playerside = 0;
+    onlineGame = true;
+    gameScene->clear();
+    playOffline();
+    addToScene(turnDisplay);
+    addToScene(check);
+    placeTheBoard();
+    placePieces();
+}
+
+void game::palyAsBlackOnline()
+{
+    delete Siri;
+    Siri =NULL;
+    AIsSide = -1;
+    playerside = 1;
+    onlineGame = true;
+    gameScene->clear();
+    playOffline();
+    addToScene(turnDisplay);
+    addToScene(check);
+    placeTheBoard();
+    placePieces();
+}
+
+

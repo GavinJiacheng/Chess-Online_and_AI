@@ -15,7 +15,7 @@ Piece::Piece(int color, int col, int row, QGraphicsItem *parent):QGraphicsPixmap
 void Piece::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //this->debug = 89;
-    if (event->button() == Qt ::LeftButton && !isdead && Game->getTurn() == this->side && Game->AIsSide != this->side)
+    if (event->button() == Qt ::LeftButton && !isdead && Game->getTurn() == this->side && Game->AIsSide != this->side && (!Game->onlineGame || Game->Lobby->yourSide == this->side))
     {
         if (Game != NULL)
             Game->pickUpPieces(this);

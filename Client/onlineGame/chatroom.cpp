@@ -5,7 +5,7 @@
 
 #pragma execution_character_set("utf-8")
 
-Chatroom::Chatroom(gameHall *parent,Qt::WindowFlags f): QDialog(parent,f)
+Chatroom::Chatroom(gameLobby *parent,Qt::WindowFlags f): QDialog(parent,f)
 {
     Parent = parent;
     setWindowTitle(tr("TCP Client"));
@@ -58,7 +58,7 @@ void Chatroom::sendMessage()
     }
     else
     {
-        //cant longer than 256!
+        //cant longer than 512!
     }
     sendLineEdit->clear();
 }
@@ -70,11 +70,14 @@ void Chatroom::CreateRoom()
     QString name= userNameLineEdit->text();
     if (name.length() <= 16)
     {
-        std::string user = userNameLineEdit->text().toStdString();
-        bool send = Parent->CreateRoom(user);
-        if (!send)
+        if (!Parent->host && !Parent->waiting && !Parent->inRooms)
         {
+            std::string user = userNameLineEdit->text().toStdString();
+            bool send = Parent->CreateRoom(user);
+            if (!send)
+            {
             // send failed!
+            }
         }
     }
     else

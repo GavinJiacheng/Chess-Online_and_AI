@@ -3,14 +3,15 @@
 
 #include <QtWidgets>
 #include <QGraphicsSceneMouseEvent>
-class gameHall;
-#include "gamehall.h"
+class gameLobby;
+#include "gamelobby.h"
 
 class ChessRoom:public QObject,  public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
-    ChessRoom(gameHall* hall, QString Name, int ID, bool isplay, QGraphicsItem* parent=NULL);
+    ChessRoom(gameLobby* lobby, QString Name, int ID, bool isplay, QGraphicsItem* parent=NULL);
+    void player2(QString player2name);
     //~ChessRoom();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
@@ -19,12 +20,14 @@ signals:
 
 private:
     QString name;
+    QString p2name = "";
     int ID;
     bool isPlaying;
-    gameHall* gamehall;
+    gameLobby* Lobby;
     void setWaitingImage();
     void setPlayingImage();
     QGraphicsTextItem* HostsName;
+    QGraphicsTextItem* P2Name = NULL;
 };
 
 
