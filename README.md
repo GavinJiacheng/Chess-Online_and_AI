@@ -6,9 +6,9 @@ A Chess which is built by Qt and C++.
 </br>Get some idea and information from [this tutorial](https://www.youtube.com/watch?v=9lqhMLFHj3A&list=PLMgDVIa0Pg8WrI9WmZR09xAbfXyfkqKWy)
 and https://github.com/subeshb1/Chess
 </br>AI's idea from https://github.com/lhartikk/simple-chess-ai
-</br>You can download and play it from [HERE](https://github.com/Jiachenggavin/Awesome_Chess-Cpp/tree/onlineEXE). 
+</br>You can download and play it from [HERE](https://github.com/Jiachenggavin/Awesome_Chess-Cpp/tree/onlineEXE).
 
-# How play online:
+# How to play online:
 ![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/Online.gif)
 
 </br>VS2017 compiles the server. Qt creator compiles the client(Game).
