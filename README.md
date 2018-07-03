@@ -8,6 +8,8 @@ and https://github.com/subeshb1/Chess
 </br>AI's idea from https://github.com/lhartikk/simple-chess-ai
 </br>You can download and play it from [HERE](https://github.com/Jiachenggavin/Awesome_Chess-Cpp/tree/onlineEXE).
 
+ALL code are in folder "Client" and "Server".
+
 # How to play online:
 ![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/Start.gif)
 
