@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 #include <QDebug>
+
+#include <mutex>
 #include "game.h"
 
 
@@ -12,6 +14,8 @@
 static gameLobby * clientptr;
 bool gameLobby::is_opened = false;
 extern game* Game;
+
+
 gameLobby::gameLobby(QWidget *parent):QGraphicsView(parent)
 {
     gameLobby::is_opened = true;
@@ -39,6 +43,22 @@ gameLobby::gameLobby(QWidget *parent):QGraphicsView(parent)
     connectToServer();
     if (connectError)
         return;
+    titleText = new QGraphicsTextItem("Online Chess Lobby");
+    QFont titleFont("arial" , 50);
+    titleText->setFont( titleFont);
+    int xPos = width()/2 - titleText->boundingRect().width()/2;
+    int yPos = 150;
+    titleText->setPos(xPos,yPos);
+    //show!
+    OnlineScene->addItem(titleText);
+    playButton = new button("Return to Menu");
+    int pxPos = 150;
+    int pyPos = 850;
+    playButton->setPos(pxPos,pyPos);
+    connect(playButton,SIGNAL(clicked()) , this , SLOT(ReturnToMenu()));
+    playButton->hide();
+    OnlineScene->addItem(playButton);
+    hostWindow();
     LobbySUI();
     chRoom->show();
 
@@ -179,7 +199,7 @@ void gameLobby::ReturnToMenu()
     }
 }
 
-/*
+
 void gameLobby::CancelHost()
 {
     cJSON * Mesg;
@@ -188,13 +208,14 @@ void gameLobby::CancelHost()
     cJSON_AddStringToObject(Mesg,"Type","CancelHost");
     char *JsonToSend = cJSON_Print(Mesg);   //make the json as char*
     cJSON_Delete(Mesg);
-    send(Connection, JsonToSend, MAXSIZE, NULL);
-    clientptr->host = false;
-    clientptr->inRooms = false;
-    clientptr->yourSide = -1;
-    showRooms();
+    if (send(Connection, JsonToSend, MAXSIZE, NULL))
+    {
+        clientptr->host = false;
+        clientptr->inRooms = false;
+        clientptr->yourSide = -1;
+        showRooms();
+    }
 }
-*/
 
 bool gameLobby::backToLobby()
 {
@@ -241,8 +262,8 @@ bool gameLobby::CreateRoom(const std::string &user)
     //test
     //const char* JsonToSend= "{\"Type\":\"List_of_Rooms\", \"List\":[{\"name\":\"xiaohong\",\"id\":3,\"isplay\":0}]}";
 
-    //waitingForJoin();
     host = true;
+    waitingForJoin();
     //create Json
     cJSON * Mesg;
     //if !Mesg
@@ -363,6 +384,7 @@ bool gameLobby::GetString()
             //You need use go back to the lobby here;
             clientptr->host = false;
             clientptr->inRooms = false;
+            clientptr->waiting = false;
             clientptr->yourSide = -1;
             emit someoneLeave();
         }
@@ -387,6 +409,7 @@ bool gameLobby::GetString()
         {
             clientptr->host = false;
             clientptr->inRooms = false;
+            clientptr->waiting = false;
             clientptr->yourSide = -1;
             emit someoneLeave();
         }
@@ -400,9 +423,9 @@ bool gameLobby::GetString()
 
 void gameLobby::createRoomsList(cJSON *json)
 {
+
     qDeleteAll(chessroomS);
     chessroomS.clear();
-
 
     cJSON *List;
     List = cJSON_GetObjectItem(json, "List");
@@ -461,10 +484,11 @@ void gameLobby::createRoomsList(cJSON *json)
 
 void gameLobby::showRooms()
 {
-    OnlineScene->clear();
+    //OnlineScene->clear(); //badass here
     LobbySUI();
+    waitingForJoin();
+
     int len = chessroomS.length();
-    qDebug() << "len: " << len;
     for (int i =0; i<len; i++)
     {
         connect(chessroomS[i], SIGNAL(clicked(int)) , this , SLOT(sendJointRequest(int)));
@@ -475,25 +499,24 @@ void gameLobby::showRooms()
 
 void gameLobby::LobbySUI()
 {
-    QGraphicsTextItem *titleText = new QGraphicsTextItem("Online Chess Games Lobby");
-    QFont titleFont("arial" , 50);
-    titleText->setFont( titleFont);
-    int xPos = width()/2 - titleText->boundingRect().width()/2;
-    int yPos = 150;
-    titleText->setPos(xPos,yPos);
-    OnlineScene->addItem(titleText);
-    button * playButton = new button("Return to Menu");
-    int pxPos = 150;
-    int pyPos = 850;
-    playButton->setPos(pxPos,pyPos);
-    connect(playButton,SIGNAL(clicked()) , this , SLOT(ReturnToMenu()));
-    OnlineScene->addItem(playButton);
+    if (!inRooms && !waiting && !host)
+        playButton->show();
+    else
+        playButton->hide();
 }
 
-/*
+
 void gameLobby::waitingForJoin()
 {
-    QGraphicsRectItem *rect(new QGraphicsRectItem());
+    if (host)
+        hostWindow_show();
+    else
+        hostWindow_hide();
+}
+
+void gameLobby::hostWindow()
+{
+    rect = new QGraphicsRectItem();
     rect->setRect(0,0,450,300);
     QBrush Abrush;
     Abrush.setStyle(Qt::SolidPattern);
@@ -503,26 +526,39 @@ void gameLobby::waitingForJoin()
     int pxPos = width()/2 - rect->boundingRect().width()/2;
     int pyPos = 250;
     rect->setPos(pxPos,pyPos);
-    OnlineScene->addItem(rect);
-    QGraphicsTextItem *Title;
-    Title = new QGraphicsTextItem("Wating for others Join your game....");
+    WindowTitle = new QGraphicsTextItem("Wating for others Join your game....");
     QFont titleFont("arial" , 20);
-    Title->setFont( titleFont);
-    int axPos = width()/2 - Title->boundingRect().width()/2;
+    WindowTitle->setFont( titleFont);
+    int axPos = width()/2 - WindowTitle->boundingRect().width()/2;
     int ayPos = 300;
-    Title->setPos(axPos,ayPos);
-    Title->setZValue(5);
-    OnlineScene->addItem(Title);
-
-    button * CancelBotton = new button("Cancel Host");
+    WindowTitle->setPos(axPos,ayPos);
+    WindowTitle->setZValue(5);
+    CancelBotton = new button("Cancel Host");
     int qxPos = width()/2 - CancelBotton->boundingRect().width()/2;
     int qyPos = 400;
     CancelBotton->setPos(qxPos,qyPos);
     CancelBotton->setZValue(5);
     connect(CancelBotton,SIGNAL(clicked()) , this , SLOT(CancelHost()));
+    hostWindow_hide();
+    OnlineScene->addItem(rect);
+    OnlineScene->addItem(WindowTitle);
     OnlineScene->addItem(CancelBotton);
 }
-*/
+
+void gameLobby::hostWindow_hide()
+{
+    rect->hide();
+    WindowTitle->hide();
+    CancelBotton->hide();
+}
+
+void gameLobby::hostWindow_show()
+{
+    rect->show();
+    WindowTitle->show();
+    CancelBotton->show();
+}
+
 //this is sooooo stupid, how can you make this stupid idea>??>??????
 
 void gameLobby::sendJointRequest(int ID)
@@ -591,9 +627,10 @@ void gameLobby::JoinTimeOut()
 
 void gameLobby::Leave()
 {
-    QMessageBox::information(NULL, "Game is end", "The host or player already left the room.");
     Game->hide();
     Game->mainmenu();
+    showRooms();
+    QMessageBox::information(NULL, "Game is end", "The host or player already left the room.");
 }
 
 void gameLobby::List_is_full()

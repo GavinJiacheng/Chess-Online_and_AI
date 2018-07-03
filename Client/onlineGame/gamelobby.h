@@ -19,6 +19,7 @@
 #include "chatroom.h"
 #include "chessroom.h"
 #include "onlinemove.h"
+#include "button.h"
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -75,6 +76,8 @@ private:
     bool waiting = false;
     bool connection = false;
     QGraphicsScene* OnlineScene;
+    QGraphicsTextItem *titleText;
+    button * playButton;
     bool sendMessage(const std::string& message, const std::string& username);
     bool CreateRoom(const std::string& user);
     bool GetString();
@@ -84,7 +87,14 @@ private:
     void exitLobby();
     void showRooms();
     void LobbySUI();
-    //void waitingForJoin(); //nedd to be done
+    void waitingForJoin(); //nedd to be done
+    void hostWindow();
+    QGraphicsRectItem *rect;
+    QGraphicsTextItem *WindowTitle;
+    button * CancelBotton;
+    void hostWindow_hide();
+    void hostWindow_show();
+
     //void CancelWaiting(); //need to be done
         //void sendMessage(string message);
 
@@ -99,7 +109,7 @@ public slots:
     void This_Game_isFull();
     void I_wannaPlayAgain();
     void ReturnToMenu();
-    //void CancelHost();
+    void CancelHost();
 
 
 };

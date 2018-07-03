@@ -51,8 +51,3 @@ Of course, it can do Promotion and Castling.
 # Bugs:
 It still has many bugs in the server. Sometimes it cannot send messages to clients.
 </br>It has a bug in AI when the AI only has two possible turns left.
-
-# Problems:
-When the host is waiting for others to join, It needs some functions to give the host right to cancel the game. Or if no players are joining, the host cannot do anything else.
-</br>It is easy but my time is not enough now.
-</br>It will be done in the future.
