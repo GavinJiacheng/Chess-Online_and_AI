@@ -210,9 +210,10 @@ void gameLobby::CancelHost()
     cJSON_Delete(Mesg);
     if (send(Connection, JsonToSend, MAXSIZE, NULL))
     {
-        clientptr->host = false;
-        clientptr->inRooms = false;
-        clientptr->yourSide = -1;
+        yourSide = -1;
+        inRooms = false;
+        waiting = false;
+        host = false;
         showRooms();
     }
 }
@@ -390,10 +391,6 @@ bool gameLobby::GetString()
         {
             //should be the host lost or\ the guest lost
             //You need use go back to the lobby here;
-            clientptr->host = false;
-            clientptr->inRooms = false;
-            clientptr->waiting = false;
-            clientptr->yourSide = -1;
             emit someoneLeave();
         }
         else if (systemInfo == "RoomFull")
@@ -415,10 +412,6 @@ bool gameLobby::GetString()
         }
         else if (systemInfo == "ReturnTolobby")
         {
-            clientptr->host = false;
-            clientptr->inRooms = false;
-            clientptr->waiting = false;
-            clientptr->yourSide = -1;
             emit someoneLeave();
         }
         cJSON_Delete(json);
@@ -635,6 +628,10 @@ void gameLobby::JoinTimeOut()
 
 void gameLobby::Leave()
 {
+    host = false;
+    inRooms = false;
+    waiting = false;
+    yourSide = -1;
     Game->hide();
     Game->mainmenu();
     showRooms();
