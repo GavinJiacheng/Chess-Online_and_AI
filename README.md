@@ -21,7 +21,7 @@ Here is another GIF how this game is played online:
 
 Here is an example of what happen when one side wins in one game:
 
-![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/End.gif)
+![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/RealEND.gif)
 
 # How this AI is:
 
