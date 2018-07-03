@@ -9,7 +9,7 @@ and https://github.com/subeshb1/Chess
 </br>You can download and play it from [HERE](https://github.com/Jiachenggavin/Awesome_Chess-Cpp/tree/onlineEXE).
 
 # How to play online:
-![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/OnlineStart.gif)
+![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/Start.gif)
 
 </br>VS2017 compiles the server. Qt creator compiles the client(Game).
 </br>It uses winsock and windows.h to write the online part. So it cannot be run in Linux now. There will be a Linux version in the future.
@@ -21,7 +21,7 @@ Here is another GIF how this game is played online:
 
 Here is an example of what happen when one side wins in one game:
 
-![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/OnlineEnd.gif)
+![Alt text](https://github.com/Jiachenggavin/Smart_Chess/raw/master/Screenshots/End.gif)
 
 # How this AI is:
 

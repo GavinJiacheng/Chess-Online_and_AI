@@ -227,7 +227,15 @@ bool gameLobby::backToLobby()
     int RetnCheck = send(Connection, JsonToSend, MAXSIZE, NULL);
     if (RetnCheck == SOCKET_ERROR)
         return false;
-    return true;
+    else
+    {
+        clientptr->host = false;
+        clientptr->inRooms = false;
+        clientptr->waiting = false;
+        clientptr->yourSide = -1;
+        showRooms();
+        return true;
+    }
 }
 
 void gameLobby::closeEvent(QCloseEvent *event)
@@ -526,7 +534,7 @@ void gameLobby::hostWindow()
     int pxPos = width()/2 - rect->boundingRect().width()/2;
     int pyPos = 250;
     rect->setPos(pxPos,pyPos);
-    WindowTitle = new QGraphicsTextItem("Wating for others Join your game....");
+    WindowTitle = new QGraphicsTextItem("Wating for other Players...");
     QFont titleFont("arial" , 20);
     WindowTitle->setFont( titleFont);
     int axPos = width()/2 - WindowTitle->boundingRect().width()/2;
