@@ -1,0 +1,1 @@
+Just the exe files of game client (can be played offline) and server.
