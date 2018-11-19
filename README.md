@@ -55,3 +55,4 @@ It still has many bugs in the server. Sometimes it cannot send messages to clien
 </br>It has a bug in AI when the AI only has two possible turns left.
 
 If you find where these bugs is in my code, I will be very appreciated for your help!
+And if you have any ideas which can help me improve this game, please tell me! 
