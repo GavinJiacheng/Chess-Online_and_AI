@@ -53,3 +53,5 @@ Of course, it can do Promotion and Castling.
 # Bugs:
 It still has many bugs in the server. Sometimes it cannot send messages to clients.
 </br>It has a bug in AI when the AI only has two possible turns left.
+
+If you find where these bugs in my code, I will be very appreciated for your help!
