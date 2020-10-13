@@ -15,7 +15,7 @@ game::game(QWidget *parent):QGraphicsView(parent)
     board = NULL;
     gameScene = new QGraphicsScene();
     gameScene->setSceneRect(0,0,1400,950);
-    piece_to_placed = NULL; // fuck you you asshole
+    piece_to_placed = NULL; // important, do not forgot to initiate it. 
 
     //Making the view
     setFixedSize(1400,950);
