@@ -470,7 +470,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
                 check->setVisible(false);
             changeTurn();
             return;
-            //What the fuck are you ? QGraphicsView::mouseReleaseEvent(event);
+            //this line was a interesting line here, I deleted it, couldn't figure out what happened: QGraphicsView::mouseReleaseEvent(event);
         }
         else
         {
@@ -568,7 +568,7 @@ void game::changeTurn()
 
 void game::playOffline()
 {
-    piece_to_placed = NULL; // LOL , you must declare this fucking piece of shit.
+    piece_to_placed = NULL; // always initiate and delete it first.
 
     turn = 0; //0 is white and 1 is black
     turnDisplay = new QGraphicsTextItem();
