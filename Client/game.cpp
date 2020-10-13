@@ -233,7 +233,7 @@ void game::mouseReleaseEvent(QMouseEvent *event)
     //if (piece_to_placed && piece_to_placed->canmove(finalPos.x(),finalPos.y())){
    //     piece_to_placed->setPos(finalPos);
     //    piece_to_placed = NULL;
-    // } // fuck you, if this function doest run, the piece is still not null, fuck it.
+    // } // A bad bug example here, if this function doest run, the piece is still not null.
 
     if (piece_to_placed)
     {
